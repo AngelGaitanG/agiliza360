@@ -1,1 +1,83 @@
 /* You can add global styles to this file, and also import other style files */
+
+@use 'styles/variables' as *;
+
+// Estilos globales
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Roboto', sans-serif;
+  background-color: $gray-100;
+  color: $gray-900;
+  line-height: 1.6;
+}
+
+// Estilos de botones
+.btn {
+  padding: 0.75rem 1.5rem;
+  border-radius: $border-radius;
+  border: none;
+  font-weight: 500;
+  cursor: pointer;
+  transition: $transition;
+
+  &-primary {
+    background-color: $primary;
+    color: $white;
+
+    &:hover {
+      background-color: $primary-dark;
+    }
+
+    &:disabled {
+      background-color: $gray-400;
+      cursor: not-allowed;
+    }
+  }
+}
+
+// Estilos de formularios
+.form-control {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid $gray-300;
+  border-radius: $border-radius;
+  font-size: 1rem;
+  transition: $transition;
+
+  &:focus {
+    outline: none;
+    border-color: $primary;
+    box-shadow: 0 0 0 2px rgba($primary, 0.2);
+  }
+
+  &.is-invalid {
+    border-color: $error;
+    
+    &:focus {
+      box-shadow: 0 0 0 2px rgba($error, 0.2);
+    }
+  }
+}
+
+.invalid-feedback {
+  color: $error;
+  font-size: 0.875rem;
+  margin-top: 0.25rem;
+}
+
+// Estilos de enlaces
+a {
+  color: $primary;
+  text-decoration: none;
+  transition: $transition;
+
+  &:hover {
+    color: $primary-dark;
+    text-decoration: underline;
+  }
+}
