@@ -1,0 +1,31 @@
+<div class="welcome-container">
+    <div class="welcome-card">
+      <ng-container *ngIf="!showCreateBrand">
+        <ng-container [ngSwitch]="userRole">
+          <!-- SuperAdmin View -->
+          <app-super-admin-view *ngSwitchCase="'SUPERADMIN'" 
+            [userName]="userName">
+          </app-super-admin-view>
+
+          <!-- Owner View -->
+          <app-owner-view *ngSwitchCase="'OWNER'"
+            [userName]="userName"
+            (showCreateBrand)="onShowCreateBrand($event)">
+          </app-owner-view>
+
+          <!-- Manager View -->
+          <app-manager-view *ngSwitchCase="'MANAGER'"
+            [userName]="userName">
+          </app-manager-view>
+
+          <!-- Default View -->
+          <div *ngSwitchDefault class="error-message">
+            Rol no reconocido. Por favor, contacte al administrador.
+          </div>
+        </ng-container>
+      </ng-container>
+
+      <!-- Create Brand Component -->
+      <app-create-brand *ngIf="showCreateBrand" (close)="onShowCreateBrand(false)"></app-create-brand>
+    </div>
+</div>

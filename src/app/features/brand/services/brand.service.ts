@@ -9,7 +9,7 @@ import { Brand } from '../models/brand.model';
 })
 export class BrandService {
   private apiUrl = `${environment.apiUrl}/brand`;
-  private token = localStorage.getItem('token');
+  private token = localStorage.getItem('auth_token');
 
   constructor(private http: HttpClient) {}
 

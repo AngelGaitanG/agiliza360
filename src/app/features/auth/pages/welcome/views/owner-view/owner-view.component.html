@@ -1,0 +1,28 @@
+<div class="owner-view">
+    <h1>¡Bienvenido, {{ userName }}!</h1>
+    <p class="subtitle">Tus marcas registradas</p>
+    
+    <div class="brands-grid" *ngIf="brands.length > 0">
+      <div class="brand-card" *ngFor="let brand of brands">
+        <h3>{{ brand.name }}</h3>
+        <p>{{ brand.description }}</p>
+        <button routerLink="/brand/{{brand._id}}" class="btn btn-primary">
+          Ir a la marca
+        </button>
+      </div>
+    </div>
+
+    <div class="no-brands">
+      <button class="btn btn-primary" (click)="toggleCreateBrand()">
+        Crear nueva marca
+      </button>
+    </div>
+
+    <div class="loading" *ngIf="loading">
+      <p>Cargando marcas...</p>
+    </div>
+
+    <div class="error-message" *ngIf="error">
+      {{ error }}
+    </div>
+  </div>

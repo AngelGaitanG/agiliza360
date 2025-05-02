@@ -1,6 +1,8 @@
 /* You can add global styles to this file, and also import other style files */
 
 @use 'styles/variables' as *;
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+@import url('https://cdn-uicons.flaticon.com/2.6.0/uicons-regular-rounded/css/uicons-regular-rounded.css');
 
 // Estilos globales
 * {
@@ -10,7 +12,7 @@
 }
 
 body {
-  font-family: 'Roboto', sans-serif;
+  font-family: 'Poppins', sans-serif;
   background-color: $gray-100;
   color: $gray-900;
   line-height: 1.6;

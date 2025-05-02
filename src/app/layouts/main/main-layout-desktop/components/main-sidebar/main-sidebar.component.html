@@ -1,0 +1,67 @@
+<nav class="sidebar" [class.sidebar-open]="sidebarOpen">
+    <div class="profile">
+        <img src="https://st3.depositphotos.com/6672868/13701/v/450/depositphotos_137014128-stock-illustration-user-profile-icon.jpg" alt="Profile">
+        <div class="user-info" *ngIf="sidebarOpen">
+            <span class="restaurant-name">{{ layoutState.type === 'BRAND' ? 'Marca' : layoutState.type === 'BRANCH' ? 'Sucursal' : 'Admin' }}</span>
+            <span class="user-name">{{ userName }}</span>
+        </div>
+    </div>
+
+    <div class="sidebar-separator"></div>
+    
+    <div class="layout-title-type">
+        <p>{{ layoutState.type === 'ADMIN' ? 'ADMIN' : layoutState.type === 'BRAND' ? 'MARCA' : 'LOCAL' }}</p>
+    </div>
+    <ul class="menu-list" [class.menu-changing]="isMenuChanging">
+        <li *ngFor="let item of menuItems" class="menu-item">
+            <a [routerLink]="item.path" 
+               routerLinkActive="active" 
+               [title]="item.title"
+               class="menu-link">
+                <i class="fi {{ item.icon }}"></i>
+                <span class="tooltip">{{ item.title }}</span>
+                <div class="menu-item-line" *ngIf="sidebarOpen">
+                    {{ item.title }}
+                </div>
+            </a>
+        </li>
+    </ul>
+    <button class="open-sidebar" (click)="toggleSidebar()">
+        <i class="fa-solid fa-arrow-right" [class.fa-rotate-180]="sidebarOpen"></i>
+    </button>
+    
+    <div class="sidebar-spacer"></div>
+    
+    <!-- Botones de acción con estilo de menú -->
+    <ul class="menu-list bottom-actions">
+        <!-- Botón de volver -->
+        <li *ngIf="canShowBackButton()" class="menu-item">
+            <button (click)="onBackClick()" class="menu-link">
+                <i class="fi fi-rr-arrow-left"></i>
+                <div class="menu-item-line" *ngIf="sidebarOpen">
+                    {{ getBackButtonText() }}
+                </div>
+            </button>
+        </li>
+        
+        <!-- Botón de configuración -->
+        <li class="menu-item">
+            <button class="menu-link" title="Configuración">
+                <i class="fi fi-rr-settings"></i>
+                <div class="menu-item-line" *ngIf="sidebarOpen">
+                    Usuario
+                </div>
+            </button>
+        </li>
+        
+        <!-- Botón de cerrar sesión -->
+        <li class="menu-item">
+            <button (click)="onLogoutClick()" class="menu-link logout-link" title="Cerrar sesión">
+                <i class="fi fi-rr-exit"></i>
+                <div class="menu-item-line" *ngIf="sidebarOpen">
+                    Cerrar sesión
+                </div>
+            </button>
+        </li>
+    </ul>
+</nav>

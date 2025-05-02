@@ -3,11 +3,12 @@ import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
+import { InputErrorComponent } from '../../../../shared/components/input-error/input-error.component';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, RouterModule],
+  imports: [CommonModule, ReactiveFormsModule, RouterModule, InputErrorComponent],
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss']
 })
@@ -15,6 +16,7 @@ export class LoginComponent implements OnInit {
   loginForm: FormGroup;
   loading = false;
   error: string | null = null;
+  showPassword = false;
 
   constructor(
     private fb: FormBuilder,
@@ -30,7 +32,7 @@ export class LoginComponent implements OnInit {
   ngOnInit(): void {
     // Verificar si el usuario ya está autenticado
     if (this.authService.isAuthenticated()) {
-      this.router.navigate(['/dashboard']);
+      this.router.navigate(['/welcome']);
     }
   }
 
@@ -46,13 +48,17 @@ export class LoginComponent implements OnInit {
 
     this.authService.login(email, password).subscribe({
       next: () => {
-        console.log('login exitoso');   
         this.router.navigate(['/welcome']);
       },
       error: (err) => {
-        this.error = err.message || 'Error al iniciar sesión';
+        console.log('ERROR', err.error.message);
+        this.error = err.error.message || 'Error al iniciar sesión';
         this.loading = false;
       }
     });
+  }
+
+  togglePassword(): void {
+    this.showPassword = !this.showPassword;
   }
 } 

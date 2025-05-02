@@ -1,0 +1,39 @@
+
+@use '../../../../../styles/variables' as *;
+
+.welcome-container {
+    display: flex;
+    justify-content: center;
+    min-height: 100vh;
+    background: linear-gradient(135deg, $primary-dark 0%, $primary 100%);
+    padding: 20px;
+  }
+
+  .welcome-card {
+    color: $white;
+    padding: 2.5rem;
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+    width: 100%;
+    max-width: 800px;
+    animation: fadeIn 0.5s ease-in-out;
+  }
+
+  .error-message {
+    color: var(--error);
+    text-align: center;
+    padding: 1rem;
+    background-color: rgba(var(--error-rgb), 0.1);
+    border-radius: var(--border-radius);
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }

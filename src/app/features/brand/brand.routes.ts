@@ -1,0 +1,35 @@
+import { Routes } from "@angular/router";
+
+export const BRAND_ROUTES: Routes = [
+    {
+        path: '',
+        loadComponent: () => import('../../layouts/main/main-layout.component').then(m => m.MainLayoutComponent),
+        children: [
+            // {
+            //     path: ':id/dashboard',
+            //     loadComponent: () => import('./pages/dashboard/dashboard.component').then(m => m.DashboardComponent)
+            // },
+            {
+                path: ':id/menu',
+                loadComponent: () => import('./pages/menu/menu.component').then(m => m.MenuComponent)
+            },
+            // {
+            //     path: ':id/branches',
+            //     loadComponent: () => import('./pages/branches/branches.component').then(m => m.BranchesComponent)
+            // },
+            // {
+            //     path: ':id/staff',
+            //     loadComponent: () => import('./pages/staff/staff.component').then(m => m.StaffComponent)
+            // },
+            // {
+            //     path: ':id/settings',
+            //     loadComponent: () => import('./pages/settings/settings.component').then(m => m.SettingsComponent)
+            // },
+            {
+                path: ':id',
+                redirectTo: ':id/menu',
+                pathMatch: 'full'
+            }
+        ]
+    }
+] 

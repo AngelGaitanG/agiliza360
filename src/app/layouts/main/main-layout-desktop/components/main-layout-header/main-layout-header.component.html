@@ -1,0 +1,14 @@
+<div class="header-container">
+  <div class="search-container">
+    <div class="search-input-wrapper">
+      <i class="fas fa-search search-icon"></i>
+      <input 
+        type="text" 
+        [(ngModel)]="searchQuery" 
+        (keyup.enter)="onSearch()"
+        placeholder="Buscar..."
+        class="search-input"
+      >
+    </div>
+  </div>
+</div>

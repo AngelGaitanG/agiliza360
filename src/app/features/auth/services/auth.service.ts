@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable, tap } from 'rxjs';
 import { environment } from '../../../../environments/environment';
 import { User } from '../models/user.model';
+import { SigninResponse } from '../models/signin-response.model';
 
 @Injectable({
   providedIn: 'root'
@@ -10,6 +11,7 @@ import { User } from '../models/user.model';
 export class AuthService {
   private currentUserSubject = new BehaviorSubject<User | null>(null);
   private readonly TOKEN_KEY = 'auth_token';
+  public authState$ = new BehaviorSubject<{user: User | null}>({user: null});
 
   constructor(private http: HttpClient) {
     const userData = localStorage.getItem('currentUser');
@@ -19,6 +21,7 @@ export class AuthService {
         const user = JSON.parse(userData);
         console.log('Parsed user:', user);
         this.currentUserSubject.next(user);
+        this.authState$.next({user});
       } catch (error) {
         console.error('Error parsing user data:', error);
         this.logout();
@@ -26,15 +29,19 @@ export class AuthService {
     }
   }
 
-  login(email: string, password: string): Observable<{ token: string, user: User }> {
-    return this.http.post<{ token: string, user: User }>(`${environment.apiUrl}/auth/signin`, {
+  login(email: string, password: string): Observable<SigninResponse> {
+    return this.http.post<SigninResponse>(`${environment.apiUrl}/auth/signin`, {
       email,
       password
     }).pipe(
       tap(response => {
-        this.setToken(response.token);
-        localStorage.setItem('currentUser', JSON.stringify(response.user));
-        this.currentUserSubject.next(response.user);
+        if (response.data) {
+          this.setToken(response.data.accessToken);
+          console.log('RESPONSE', response);
+          localStorage.setItem('currentUser', JSON.stringify(response.data.user));
+          this.currentUserSubject.next(response.data.user);
+          this.authState$.next({user: response.data.user});
+        }
       })
     );
   }
@@ -43,6 +50,7 @@ export class AuthService {
     localStorage.removeItem(this.TOKEN_KEY);
     localStorage.removeItem('currentUser');
     this.currentUserSubject.next(null);
+    this.authState$.next({user: null});
   }
 
   getToken(): string | null {
@@ -60,4 +68,13 @@ export class AuthService {
   isAuthenticated(): boolean {
     return !!this.getToken();
   }
-} 
+
+  getUserRole(): string {
+    const user = this.currentUserSubject.value;
+    return user?.role || '';
+  }
+
+  removeToken(): void {
+    localStorage.removeItem(this.TOKEN_KEY);
+  }
+}
