@@ -1,0 +1,27 @@
+<div class="custom-select">
+  <button 
+    #selectButton
+    class="select-btn" 
+    (click)="toggleMenu()"
+    [class.open]="isOpen()"
+  >
+    {{ displayLabel }}
+    <span class="chevron" [class.rotated]="isOpen()"></span>
+  </button>
+
+  <ul 
+    #selectMenu
+    class="select-menu" 
+    [class.open]="isOpen()"
+    [class.top]="menuPosition() === 'top'"
+    [class.bottom]="menuPosition() === 'bottom'"
+  >
+    <li 
+      *ngFor="let option of options" 
+      [class.disabled]="option.disabled"
+      (click)="selectOption(option)"
+    >
+      {{ option.label }}
+    </li>
+  </ul>
+</div>

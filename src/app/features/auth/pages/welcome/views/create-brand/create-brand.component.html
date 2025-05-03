@@ -1,4 +1,71 @@
 <div class="create-brand-container">
-  <h2>Se activó el create-brand</h2>
-  <button class="btn-back" (click)="goBack()">Volver a Owner View</button>
+  <button class="btn-back" (click)="goBack()">
+    <span>←</span>
+    Volver
+  </button>
+
+  <h1 class="create-brand-title">CREAR NUEVA MARCA</h1>
+
+  <form [formGroup]="createBrandForm" (ngSubmit)="onSubmit()" class="create-brand-form">
+    <div class="first-group">
+      <div class="input-group">
+        <label>Nombre de la Marca</label>
+        <input type="text" formControlName="name" placeholder="Ej: TechStore Perú">
+      </div>
+
+      <div class="input-group">
+        <label>Subdominio</label>
+        <input type="text" formControlName="subdomain" placeholder="Ej: techstore">
+      </div>
+
+      <div class="input-group">
+        <label>Descripción</label>
+        <textarea formControlName="description" placeholder="Describe tu marca"></textarea>
+      </div>
+    </div>
+
+    <div class="second-group">
+      <div class="input-group">
+        <label>Categoría de Negocio</label>
+        <app-custom-select
+          [options]="categories"
+          [selected]="createBrandForm.get('businessCategory')?.value"
+          (optionSelected)="onCategorySelected($event)"
+        ></app-custom-select>
+      </div>
+
+      <div class="input-group">
+        <label>Idioma</label>
+        <app-custom-select
+          [options]="languages"
+          [selected]="createBrandForm.get('language')?.value"
+          (optionSelected)="onLanguageSelected($event)"
+        ></app-custom-select>
+      </div>
+
+      <div class="input-group">
+        <label>Zona Horaria</label>
+        <app-custom-select
+          [options]="timezones"
+          [selected]="createBrandForm.get('timezone')?.value"
+          (optionSelected)="onTimezoneSelected($event)"
+        ></app-custom-select>
+      </div>
+    </div>
+  </form>
+
+  <div class="form-actions">
+    <button 
+      type="submit" 
+      class="btn-submit" 
+      [disabled]="createBrandForm.invalid || loading"
+      (click)="onSubmit()"
+    >
+      {{ loading ? 'Creando...' : 'Crear Marca' }}
+    </button>
+  </div>
+
+  <div *ngIf="error" class="error-message">
+    {{ error }}
+  </div>
 </div>

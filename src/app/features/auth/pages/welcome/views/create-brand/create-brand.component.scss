@@ -1,33 +1,151 @@
 @use '../../../../../../../styles/variables' as *;
 
-.create-brand {
-  background: $white;
-}
-
 .create-brand-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 2rem;
-  gap: 1rem;
-
-  h2 {
-    color: var(--text-color);
-    margin-bottom: 1rem;
-  }
+  padding: 1.25rem 1rem 1rem 1rem;
+  width: 100%;
+  max-width: 50rem;
+  margin: 1.5rem auto;
+  // background: linear-gradient(135deg, #f8f6ff 0%, #e9e4f5 100%);
+  border-radius: 1.25rem;
+  // box-shadow: 0 0.375rem 1.5rem rgba(80, 38, 157, 0.10);
+  color: $primary;
+  // min-height: 40rem;
 
   .btn-back {
-    padding: 0.5rem 1rem;
-    background-color: var(--primary);
-    color: white;
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
+    padding: 0.25rem 0.5rem;
+    background: none;
+    color: #50269D;
     border: none;
-    border-radius: 4px;
     cursor: pointer;
-    transition: background-color 0.3s ease;
-
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    font-size: 0.8125rem;
+    font-weight: 500;
+    transition: color 0.3s ease;
+    z-index: 2;
     &:hover {
-      background-color: var(--primary-dark);
+      color: #7c4dff;
+    }
+  }
+
+  .create-brand-title {
+    color: white;
+    margin-bottom: 1.5rem;
+    text-align: center;
+    font-weight: 700;
+    font-size: 1.5rem;
+    letter-spacing: 0.05rem;
+  }
+
+  .create-brand-form {
+    display: flex;
+    flex-direction: row;
+    gap: 1.5rem;
+    justify-content: center;
+    align-items: flex-start;
+    background: #fff;
+    border-radius: 1rem;
+    box-shadow: 0 0.25rem 1.25rem rgba(80, 38, 157, 0.08);
+    padding: 1.5rem 1.25rem 1.25rem 1.25rem;
+    width: 100%;
+    max-width: 45rem;
+    margin: 0 auto;
+
+    .first-group, .second-group {
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+      flex: 1;
+    }
+
+    .input-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+      align-items: flex-start;
+      background: #f6f3fd;
+      border-radius: 0.625rem;
+      padding: 0.875rem 0.875rem 0.75rem 0.875rem;
+      box-shadow: 0 0.125rem 0.375rem rgba(80, 38, 157, 0.04);
+      label {
+        font-size: 0.875rem;
+        font-weight: 500;
+        color: #50269D;
+        margin-bottom: 0.125rem;
+      }
+      input, textarea {
+        display: block;
+        padding: 0.5rem 0.75rem;
+        border-radius: 0.375rem;
+        border: 1.5px solid #d1c4e9;
+        background-color: #fff;
+        width: 100%;
+        font-size: 0.875rem;
+        transition: border-color 0.2s;
+        &:focus {
+          outline: none;
+          border-color: #7c4dff;
+        }
+      }
+      textarea {
+        min-height: 4rem;
+        resize: vertical;
+      }
+    }
+
+    .input-group app-custom-select {
+      width: 100%;
+    }
+  }
+
+  .form-actions {
+    display: flex;
+    justify-content: center;
+    margin-top: 1.5rem;
+    width: 100%;
+    .btn-submit {
+      padding: 0.625rem 1.75rem;
+      background: linear-gradient(90deg, #50269D 0%, #7c4dff 100%);
+      color: #fff;
+      border: none;
+      border-radius: 0.625rem;
+      font-size: 0.875rem;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: 0 0.125rem 0.375rem rgba(80, 38, 157, 0.10);
+      transition: background 0.2s, box-shadow 0.2s;
+      &:hover:not(:disabled) {
+        background: linear-gradient(90deg, #7c4dff 0%, #50269D 100%);
+        box-shadow: 0 0.25rem 0.75rem rgba(80, 38, 157, 0.13);
+      }
+      &:disabled {
+        background: #d1c4e9;
+        color: #fff;
+        cursor: not-allowed;
+      }
+    }
+  }
+
+  .error-message {
+    margin-top: 1rem;
+    padding: 0.75rem 1rem;
+    background-color: #ffebee;
+    color: #c62828;
+    border-radius: 0.5rem;
+    font-size: 0.875rem;
+    text-align: center;
+    box-shadow: 0 0.125rem 0.375rem rgba(198, 40, 40, 0.1);
+  }
+
+  @media (max-width: 50rem) {
+    .create-brand-form {
+      flex-direction: column;
+      gap: 1rem;
+      padding: 1rem 0.25rem;
     }
   }
 }

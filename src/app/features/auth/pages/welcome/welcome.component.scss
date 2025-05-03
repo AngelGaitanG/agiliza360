@@ -1,21 +1,26 @@
 
 @use '../../../../../styles/variables' as *;
 
-.welcome-container {
+:host {
     display: flex;
     justify-content: center;
+    // align-items: center;
     min-height: 100vh;
     background: linear-gradient(135deg, $primary-dark 0%, $primary 100%);
     padding: 20px;
+}
+.welcome-container {
+    display: flex;
+    justify-content: center;
+    // align-items: center;
+
   }
 
   .welcome-card {
     color: $white;
-    padding: 2.5rem;
     border-radius: var(--border-radius);
     box-shadow: var(--box-shadow);
     width: 100%;
-    max-width: 800px;
     animation: fadeIn 0.5s ease-in-out;
   }
 
