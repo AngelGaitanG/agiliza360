@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../../environments/environment';
 import { Brand } from '../models/brand.model';
+import { CreateBrandResponse } from '../models/create-brand.response';
 
 @Injectable({
   providedIn: 'root'
@@ -24,9 +25,16 @@ export class BrandService {
   getBrandById(id: string): Observable<Brand> {
     return this.http.get<Brand>(`${this.apiUrl}/${id}`);
   }
-
-  createBrand(brand: Partial<Brand>): Observable<Brand> {
-    return this.http.post<Brand>(this.apiUrl, brand);
+  // this.http.post(`${environment.apiUrl}/brand`, formData, {
+  //   headers: {
+  //     'Authorization': `Bearer ${token}`
+  //   }
+  createBrand(brand: Partial<Brand>): Observable<CreateBrandResponse> {
+    return this.http.post<CreateBrandResponse>(this.apiUrl, brand, {
+      headers: {
+        'Authorization': `Bearer ${this.token}`
+      }
+    });
   }
 
   updateBrand(id: string, brand: Partial<Brand>): Observable<Brand> {

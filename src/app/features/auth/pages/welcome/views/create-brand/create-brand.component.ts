@@ -3,18 +3,17 @@ import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { CustomSelectComponent } from '../../../../../../shared/components/custom-select/custom-select.component';
 import { CustomSelectOption } from '../../../../../../shared/components/custom-select/custom-select.types';
-import { HttpClient } from '@angular/common/http';
-import { environment } from '../../../../../../../environments/environment';
-
-interface BusinessCategory {
-  value: string;
-  label: string;
-}
+import { BrandService } from '../../../../../brand/services/brand.service';
+import { ErrorResponse } from '../../../../../../core/models/error.model';
+import { BUSINESS_CATEGORIES } from '../../../../../../core/models/brand-categories.constant';
+import { LANGUAGES } from '../../../../../../core/models/languages.constant';
+import { Timezones } from '../../../../../../core/models/timezones.constant';
+import { InputErrorComponent } from '../../../../../../shared/components/input-error/input-error.component';
 
 @Component({
   selector: 'app-create-brand',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, CustomSelectComponent],
+  imports: [CommonModule, ReactiveFormsModule, CustomSelectComponent, InputErrorComponent],
   templateUrl: './create-brand.component.html',
   styleUrls: ['./create-brand.component.scss']
 })
@@ -25,33 +24,32 @@ export class CreateBrandComponent {
   error = '';
 
   categories: CustomSelectOption[] = [
-    { value: 'Electrónica y Tecnología', label: 'Electrónica y Tecnología' },
-    { value: 'Retail', label: 'Retail' },
-    { value: 'Restaurante', label: 'Restaurante' },
-    { value: 'Servicios', label: 'Servicios' },
-    { value: 'Manufactura', label: 'Manufactura' },
-    { value: 'Otro', label: 'Otro' }
+    { value: BUSINESS_CATEGORIES.IT, label: 'Electrónica y Tecnología' },
+    { value: BUSINESS_CATEGORIES.RETAIL, label: 'Retail' },
+    { value: BUSINESS_CATEGORIES.RESTAURANT, label: 'Restaurante' },
+    { value: BUSINESS_CATEGORIES.MANUFACTURING, label: 'Manufactura' },
+    { value: BUSINESS_CATEGORIES.OTHER, label: 'Otro' }
   ];
 
   languages: CustomSelectOption[] = [
-    { value: 'es', label: 'Español' },
-    { value: 'en', label: 'Inglés' },
-    { value: 'fr', label: 'Francés' },
-    { value: 'de', label: 'Alemán' },
-    { value: 'it', label: 'Italiano' }
+    { value: LANGUAGES.SPANISH, label: 'Español' },
+    { value: LANGUAGES.ENGLISH, label: 'Inglés' },
+    { value: LANGUAGES.FRENCH, label: 'Francés' },
+    { value: LANGUAGES.GERMAN, label: 'Alemán' },
+    { value: LANGUAGES.ITALIAN, label: 'Italiano' }
   ];
 
   timezones: CustomSelectOption[] = [
-    { value: 'America/Lima', label: 'America/Lima' },
-    { value: 'America/Santiago', label: 'America/Santiago' },
-    { value: 'America/Mexico_City', label: 'America/Mexico_City' },
-    { value: 'America/New_York', label: 'America/New_York' },
-    { value: 'Europe/London', label: 'Europe/London' }
+    { value: Timezones.LIMA, label: 'America/Lima' },
+    { value: Timezones.SANTIAGO, label: 'America/Santiago' },
+    { value: Timezones.MEXICO_CITY, label: 'America/Mexico_City' },
+    { value: Timezones.NEW_YORK, label: 'America/New_York' },
+    { value: Timezones.LONDON, label: 'Europe/London' }
   ];
 
   constructor(
     private fb: FormBuilder,
-    private http: HttpClient
+    private brandService: BrandService
   ) {
     this.createBrandForm = this.fb.group({
       name: ['', [Validators.required]],
@@ -64,6 +62,12 @@ export class CreateBrandComponent {
   }
 
   onSubmit(): void {
+    // Marcar todos los campos como touched para mostrar errores
+    Object.keys(this.createBrandForm.controls).forEach(key => {
+      const control = this.createBrandForm.get(key);
+      control?.markAsTouched();
+    });
+
     if (this.createBrandForm.invalid) {
       return;
     }
@@ -72,26 +76,20 @@ export class CreateBrandComponent {
     this.error = '';
 
     const formData = this.createBrandForm.value;
-    const token = localStorage.getItem('auth_token'); // Asegúrate de que el token esté disponible
 
-    if (!token) {
-      this.error = 'No se encontró el token de autenticación';
-      this.loading = false;
-      return;
-    }
-
-    this.http.post(`${environment.apiUrl}/brand`, formData, {
-      headers: {
-        'Authorization': `Bearer ${token}`
-      }
-    }).subscribe({
-      next: (response) => {
-        this.loading = false;
-        this.close.emit();
+    this.brandService.createBrand(formData).subscribe({
+      next: () => {
+        this.goBack();
       },
-      error: (error) => {
+      error: (error: ErrorResponse) => {
         this.loading = false;
-        this.error = error.error?.message || 'Error al crear la marca';
+        if(error.error.statusCode === 400){
+          this.error = error.error.message;
+          this.loading = false;
+        }
+      },
+      complete: () => {
+        this.loading = false;
       }
     });
   }

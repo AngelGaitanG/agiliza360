@@ -2,7 +2,7 @@
   <button 
     #selectButton
     class="select-btn" 
-    (click)="toggleMenu()"
+    (click)="$event.preventDefault(); $event.stopPropagation(); toggleMenu()"
     [class.open]="isOpen()"
   >
     {{ displayLabel }}
@@ -19,7 +19,7 @@
     <li 
       *ngFor="let option of options" 
       [class.disabled]="option.disabled"
-      (click)="selectOption(option)"
+      (click)="$event.preventDefault(); $event.stopPropagation(); selectOption(option)"
     >
       {{ option.label }}
     </li>
