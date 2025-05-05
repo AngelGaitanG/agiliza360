@@ -1,0 +1,86 @@
+<div class="integration-categories">
+  <table>
+    <thead>
+      <tr class="main-headers">
+        <th colspan="3">RESTPE</th>
+        <th colspan="3">AGILIZA360</th>
+      </tr>
+      <tr class="sub-headers">
+        <th>ID</th>
+        <th>Nombre</th>
+        <th>Integrado</th>
+        <th>ID</th>
+        <th>Nombre</th>
+        <th>Integrado</th>
+      </tr>
+    </thead>
+    <tbody>
+      <ng-container *ngIf="categoriesInfo">
+        <tr *ngFor="let category of paginatedCategories">
+          <!-- Datos RESTPE -->
+          <ng-container *ngIf="category.existsInRestpe; else restpeEmpty">
+            <td>{{ getRestpeCategory(category.id)?.id }}</td>
+            <td>{{ getRestpeCategory(category.id)?.name }}</td>
+            <td>
+              <span class="status" [class.integrated]="category.existsInRestpe">
+                {{ category.existsInRestpe ? 'Sí' : 'No' }}
+              </span>
+            </td>
+          </ng-container>
+          <ng-template #restpeEmpty>
+            <td>-</td>
+            <td>-</td>
+            <td>
+              <span class="status">No</span>
+            </td>
+          </ng-template>
+
+          <!-- Datos AGILIZA360 -->
+          <ng-container *ngIf="category.existsInAgiliza360; else agilizaEmpty">
+            <td>{{ getAgilizaCategory(category.id)?.id }}</td>
+            <td>{{ getAgilizaCategory(category.id)?.name }}</td>
+            <td>
+              <span class="status" [class.integrated]="category.existsInAgiliza360">
+                {{ category.existsInAgiliza360 ? 'Sí' : 'No' }}
+              </span>
+            </td>
+          </ng-container>
+          <ng-template #agilizaEmpty>
+            <td>-</td>
+            <td>-</td>
+            <td>
+              <span class="status">No</span>
+            </td>
+          </ng-template>
+        </tr>
+      </ng-container>
+    </tbody>
+  </table>
+
+  <div class="pagination" *ngIf="totalPages > 1">
+    <button 
+      class="pagination-button" 
+      [class.disabled]="currentPage === 1"
+      (click)="changePage(currentPage - 1)"
+    >
+      Anterior
+    </button>
+    <div class="page-numbers">
+      <button 
+        *ngFor="let page of [].constructor(totalPages); let i = index" 
+        class="page-number"
+        [class.active]="currentPage === i + 1"
+        (click)="changePage(i + 1)"
+      >
+        {{ i + 1 }}
+      </button>
+    </div>
+    <button 
+      class="pagination-button" 
+      [class.disabled]="currentPage === totalPages"
+      (click)="changePage(currentPage + 1)"
+    >
+      Siguiente
+    </button>
+  </div>
+</div>

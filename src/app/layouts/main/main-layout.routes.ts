@@ -15,6 +15,7 @@ export class MainLayoutRoutes {
     { path: 'menu', title: 'Menú', icon: 'fi-rr-restaurant' },
     { path: 'staff', title: 'Personal', icon: 'fi-rr-users-alt' },
     { path: 'settings', title: 'Configuración', icon: 'fi-rr-document-gear' },
+    { path: 'integration', title: 'Integración', icon: 'fi-rr-cloud-download' },
   ];
 
   branchMenuItems: MenuItem[] = [

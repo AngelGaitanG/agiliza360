@@ -16,7 +16,8 @@
 
     .brands-grid {
       display: flex;
-      flex-direction: column;
+      flex-direction: row;
+      flex-wrap: wrap;
       align-items: center;
       gap: 2rem;
       margin-top: 2rem;

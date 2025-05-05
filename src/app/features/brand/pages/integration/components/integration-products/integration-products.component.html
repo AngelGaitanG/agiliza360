@@ -1,0 +1,275 @@
+<div class="integration-products">
+  <table>
+    <thead>
+      <tr class="main-headers">
+        <th colspan="6">RESTPE</th>
+        <th colspan="6">AGILIZA360</th>
+        <th></th>
+      </tr>
+      <tr class="sub-headers">
+        <th>ID</th>
+        <th>Nombre</th>
+        <th>Descripción</th>
+        <th>Precio</th>
+        <th>Stock</th>
+        <th>Estado</th>
+        <th>ID</th>
+        <th>Nombre</th>
+        <th>Descripción</th>
+        <th>Precio</th>
+        <th>Stock</th>
+        <th>Estado</th>
+        <th>Modificadores</th>
+      </tr>
+    </thead>
+    <tbody>
+      <ng-container *ngIf="productsInfo">
+        <ng-container *ngFor="let product of paginatedProducts">
+          <tr>
+            <!-- Datos RESTPE -->
+            <ng-container *ngIf="product.existsInRestpe; else restpeEmpty">
+              <td>{{ getRestpeProduct(product.id)?.id }}</td>
+              <td class="truncate" [title]="getRestpeProduct(product.id)?.name">{{ getRestpeProduct(product.id)?.name }}</td>
+              <td class="truncate" [title]="getRestpeProduct(product.id)?.description">{{ getRestpeProduct(product.id)?.description || '-' }}</td>
+              <td>{{ getRestpeProduct(product.id)?.basePrice | currency }}</td>
+              <td>
+                <span class="stock" [class.out-of-stock]="getRestpeProduct(product.id)?.isOutOfStock">
+                  {{ getRestpeProduct(product.id)?.isOutOfStock ? 'No' : 'Si' }}
+                </span>
+              </td>
+              <td>
+                <span class="status" [class.integrated]="product.status === 'integrated'" [class.pending]="product.status === 'pending'">
+                  {{ product.status === 'integrated' ? 'Integrado' : 'Pendiente' }}
+                </span>
+              </td>
+            </ng-container>
+            <ng-template #restpeEmpty>
+              <td>-</td>
+              <td>-</td>
+              <td>-</td>
+              <td>-</td>
+              <td>-</td>
+              <td>
+                <span class="status">No</span>
+              </td>
+            </ng-template>
+
+            <!-- Datos AGILIZA360 -->
+            <ng-container *ngIf="product.existsInAgiliza360; else agilizaEmpty">
+              <td>{{ getAgilizaProduct(product.id)?.id }}</td>
+              <td class="truncate" [title]="getAgilizaProduct(product.id)?.name">{{ getAgilizaProduct(product.id)?.name }}</td>
+              <td class="truncate" [title]="getAgilizaProduct(product.id)?.description">{{ getAgilizaProduct(product.id)?.description || '-' }}</td>
+              <td>{{ getAgilizaProduct(product.id)?.basePrice | currency }}</td>
+              <td>
+                <span class="stock" [class.out-of-stock]="getAgilizaProduct(product.id)?.isOutOfStock">
+                  {{ getAgilizaProduct(product.id)?.isOutOfStock ? 'Sin Stock' : 'Con Stock' }}
+                </span>
+              </td>
+              <td>
+                <span class="status" [class.integrated]="product.status === 'integrated'" [class.pending]="product.status === 'pending'">
+                  {{ product.status === 'integrated' ? 'Integrado' : 'Pendiente' }}
+                </span>
+              </td>
+            </ng-container>
+            <ng-template #agilizaEmpty>
+              <td>-</td>
+              <td>-</td>
+              <td>-</td>
+              <td>-</td>
+              <td>-</td>
+              <td>
+                <span class="status">No</span>
+              </td>
+            </ng-template>
+
+            <!-- Botón de modificadores -->
+            <td>
+              <button 
+                class="modifiers-button" 
+                (click)="toggleOptions(product.id)"
+                [class.expanded]="isExpanded(product.id)"
+                *ngIf="hasModifiers(product.id)"
+              >
+                <i class="fa-solid" [class.fa-chevron-down]="!isExpanded(product.id)" [class.fa-chevron-up]="isExpanded(product.id)"></i>
+              </button>
+            </td>
+          </tr>
+
+          <!-- Tabla de modificadores -->
+          <tr class="modifiers-row" *ngIf="isExpanded(product.id)">
+            <td colspan="13">
+              <div class="modifiers-container">
+                <div class="modifiers-section" *ngIf="product.existsInRestpe">
+                  <h4>Modificadores RESTPE</h4>
+                  <table class="modifiers-table">
+                    <thead>
+                      <tr>
+                        <th>ID</th>
+                        <th>Nombre</th>
+                        <th>Tipo</th>
+                        <th>Cantidad</th>
+                        <th>Estado</th>
+                        <th>Opciones</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let modifier of getRestpeProduct(product.id)?.modifiers">
+                        <td>{{ modifier.id }}</td>
+                        <td>{{ modifier.name }}</td>
+                        <td>
+                          <span class="type" [class.multiple]="modifier.isMultiple">
+                            {{ modifier.isMultiple ? 'Múltiple' : 'Único' }}
+                          </span>
+                        </td>
+                        <td>
+                          {{ modifier.minQuantity }} - {{ modifier.maxQuantity }}
+                        </td>
+                        <td>
+                          <span class="status" [class.active]="modifier.status === 'active'">
+                            {{ modifier.status === 'active' ? 'Activo' : 'Inactivo' }}
+                          </span>
+                        </td>
+                        <td>
+                          <button class="options-button" (click)="toggleModifierOptions(modifier.id)">
+                            <i class="fa-solid" [class.fa-chevron-down]="!isModifierExpanded(modifier.id)" [class.fa-chevron-up]="isModifierExpanded(modifier.id)"></i>
+                            {{ modifier.options.length }} opciones
+                          </button>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                  <!-- Opciones de modificadores RESTPE -->
+                  <div class="options-container" *ngFor="let modifier of getRestpeProduct(product.id)?.modifiers">
+                    <div class="options-table" *ngIf="isModifierExpanded(modifier.id)">
+                      <table>
+                        <thead>
+                          <tr>
+                            <th>ID</th>
+                            <th>Nombre</th>
+                            <th>Precio</th>
+                            <th>Stock</th>
+                            <th>Estado</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr *ngFor="let option of modifier.options">
+                            <td>{{ option.id }}</td>
+                            <td>{{ option.name }}</td>
+                            <td>{{ option.price | currency }}</td>
+                            <td>{{ option.stock }}</td>
+                            <td>
+                              <span class="status" [class.active]="option.status === 'active'">
+                                {{ option.status === 'active' ? 'Activo' : 'Inactivo' }}
+                              </span>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="modifiers-section" *ngIf="product.existsInAgiliza360">
+                  <h4>Modificadores AGILIZA360</h4>
+                  <table class="modifiers-table">
+                    <thead>
+                      <tr>
+                        <th>ID</th>
+                        <th>Nombre</th>
+                        <th>Tipo</th>
+                        <th>Cantidad</th>
+                        <th>Estado</th>
+                        <th>Opciones</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let modifier of getAgilizaProduct(product.id)?.modifiers">
+                        <td>{{ modifier.id }}</td>
+                        <td>{{ modifier.name }}</td>
+                        <td>
+                          <span class="type" [class.multiple]="modifier.isMultiple">
+                            {{ modifier.isMultiple ? 'Múltiple' : 'Único' }}
+                          </span>
+                        </td>
+                        <td>
+                          {{ modifier.minQuantity }} - {{ modifier.maxQuantity }}
+                        </td>
+                        <td>
+                          <span class="status" [class.active]="modifier.status === 'active'">
+                            {{ modifier.status === 'active' ? 'Activo' : 'Inactivo' }}
+                          </span>
+                        </td>
+                        <td>
+                          <button class="options-button" (click)="toggleModifierOptions(modifier.id)">
+                            <i class="fa-solid" [class.fa-chevron-down]="!isModifierExpanded(modifier.id)" [class.fa-chevron-up]="isModifierExpanded(modifier.id)"></i>
+                            {{ modifier.options.length }} opciones
+                          </button>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                  <!-- Opciones de modificadores AGILIZA360 -->
+                  <div class="options-container" *ngFor="let modifier of getAgilizaProduct(product.id)?.modifiers">
+                    <div class="options-table" *ngIf="isModifierExpanded(modifier.id)">
+                      <table>
+                        <thead>
+                          <tr>
+                            <th>ID</th>
+                            <th>Nombre</th>
+                            <th>Precio</th>
+                            <th>Stock</th>
+                            <th>Estado</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr *ngFor="let option of modifier.options">
+                            <td>{{ option.id }}</td>
+                            <td>{{ option.name }}</td>
+                            <td>{{ option.price | currency }}</td>
+                            <td>{{ option.stock }}</td>
+                            <td>
+                              <span class="status" [class.active]="option.status === 'active'">
+                                {{ option.status === 'active' ? 'Activo' : 'Inactivo' }}
+                              </span>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </td>
+          </tr>
+        </ng-container>
+      </ng-container>
+    </tbody>
+  </table>
+
+  <div class="pagination" *ngIf="totalPages > 1">
+    <button 
+      class="pagination-button" 
+      [class.disabled]="currentPage === 1"
+      (click)="changePage(currentPage - 1)"
+    >
+      Anterior
+    </button>
+    <div class="page-numbers">
+      <button 
+        *ngFor="let page of [].constructor(totalPages); let i = index" 
+        class="page-number"
+        [class.active]="currentPage === i + 1"
+        (click)="changePage(i + 1)"
+      >
+        {{ i + 1 }}
+      </button>
+    </div>
+    <button 
+      class="pagination-button" 
+      [class.disabled]="currentPage === totalPages"
+      (click)="changePage(currentPage + 1)"
+    >
+      Siguiente
+    </button>
+  </div>
+</div>

@@ -1,3 +1,5 @@
+@use '../../../../styles/variables' as *;
+
 .layout-container {
     display: flex;
     min-height: 100vh;
@@ -11,27 +13,17 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background-image: url('https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/89338e24-9904-45e7-9c36-fcb94fe8c9e9/dje67q6-b0cda6e2-a699-454a-b247-1dd947679d90.jpg/v1/fill/w_1280,h_732,q_75,strp/un_fondo_para_una_pgina_web_de_restaurantes__estil_by_meetssie_dje67q6-fullview.jpg?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7ImhlaWdodCI6Ijw9NzMyIiwicGF0aCI6IlwvZlwvODkzMzhlMjQtOTkwNC00NWU3LTljMzYtZmNiOTRmZThjOWU5XC9kamU2N3E2LWIwY2RhNmUyLWE2OTktNDU0YS1iMjQ3LTFkZDk0NzY3OWQ5MC5qcGciLCJ3aWR0aCI6Ijw9MTI4MCJ9XV0sImF1ZCI6WyJ1cm46c2VydmljZTppbWFnZS5vcGVyYXRpb25zIl19.ZNa2Wm6AbpRLfLTP5ZdydJW_TSA5w7KKEUjLMSvZDbc');
-    background-position: center;
-    background-size: cover;
-    background-repeat: no-repeat;
+    background: linear-gradient(135deg, $primary-dark 0%, $primary 100%);
     z-index: 1;
 
-    &::after {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background: #282a37fa;
-    }
+
 }
 
 .main-content {
     flex: 1;
     padding: 2rem;
     padding-top: 0;
+    padding-bottom: 0;
     overflow-y: auto;
     position: relative;
     z-index: 1;

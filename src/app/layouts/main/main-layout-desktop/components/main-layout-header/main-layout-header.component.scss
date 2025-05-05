@@ -1,3 +1,5 @@
+@use '../../../../../../styles/variables' as *;
+
 .header-container {
   width: 100%;
   display: flex;
@@ -19,7 +21,7 @@
   left: 1rem;
   top: 50%;
   transform: translateY(-50%);
-  color: #6B7280;
+  color: $white;
   font-size: 1.1rem;
   pointer-events: none;
 }
@@ -30,22 +32,23 @@
   background-color: transparent;
   border: 2px solid transparent;
   border-radius: 1.5rem;
-  color: #e0e0e0;
+  color: $white;
   font-size: 0.95rem;
-  font-weight: 600;
+  font-weight: 400;
+  letter-spacing: 0.5px;
   transition: all 0.3s ease;
 
   &:focus {
     outline: none;
-    border: 2px solid #1D90F4;
-    box-shadow: 0 0 10px rgba(29, 144, 244, 0.5);
+    border: 2px solid $primary;
+    box-shadow: 0 0 10px rgba($primary, 0.5);
   }
 
   &:focus .search-icon {
-    color: #1D90F4;
+    color: $primary;
   }
 
   &::placeholder {
-    color: #6B7280;
+    color: $white;
   }
 }

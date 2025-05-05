@@ -13,6 +13,10 @@ export const BRAND_ROUTES: Routes = [
                 path: ':id/menu',
                 loadComponent: () => import('./pages/menu/menu.component').then(m => m.MenuComponent)
             },
+            {
+                path: ':id/integration',
+                loadComponent: () => import('./pages/integration/integration.component').then(m => m.IntegrationComponent)
+            },
             // {
             //     path: ':id/branches',
             //     loadComponent: () => import('./pages/branches/branches.component').then(m => m.BranchesComponent)

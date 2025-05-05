@@ -1,0 +1,175 @@
+<div class="integration-modifiers">
+  <table>
+    <thead>
+      <tr class="main-headers">
+        <th colspan="5">RESTPE</th>
+        <th colspan="5">AGILIZA360</th>
+        <th></th>
+      </tr>
+      <tr class="sub-headers">
+        <th>ID</th>
+        <th>Nombre</th>
+        <th>Tipo</th>
+        <th>Cantidad</th>
+        <th>Estado</th>
+        <th>ID</th>
+        <th>Nombre</th>
+        <th>Tipo</th>
+        <th>Cantidad</th>
+        <th>Estado</th>
+        <th>Opciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <ng-container *ngIf="modifiersInfo">
+        <ng-container *ngFor="let modifier of paginatedModifiers">
+          <tr>
+            <!-- Datos RESTPE -->
+            <ng-container *ngIf="modifier.existsInRestpe; else restpeEmpty">
+              <td>{{ getRestpeModifier(modifier.id)?.id }}</td>
+              <td>{{ getRestpeModifier(modifier.id)?.name }}</td>
+              <td>
+                <span class="type" [class.multiple]="getRestpeModifier(modifier.id)?.isMultiple">
+                  {{ getRestpeModifier(modifier.id)?.isMultiple ? 'Múltiple' : 'Único' }}
+                </span>
+              </td>
+              <td>
+                {{ getRestpeModifier(modifier.id)?.minQuantity }} - {{ getRestpeModifier(modifier.id)?.maxQuantity }}
+              </td>
+              <td>
+                <span class="status" [class.integrated]="modifier.status === 'integrated'" [class.pending]="modifier.status === 'pending'">
+                  {{ modifier.status === 'integrated' ? 'Integrado' : 'Pendiente' }}
+                </span>
+              </td>
+            </ng-container>
+            <ng-template #restpeEmpty>
+              <td>-</td>
+              <td>-</td>
+              <td>-</td>
+              <td>-</td>
+              <td>
+                <span class="status">No</span>
+              </td>
+            </ng-template>
+
+            <!-- Datos AGILIZA360 -->
+            <ng-container *ngIf="modifier.existsInAgiliza360; else agilizaEmpty">
+              <td>{{ getAgilizaModifier(modifier.id)?.id }}</td>
+              <td>{{ getAgilizaModifier(modifier.id)?.name }}</td>
+              <td>
+                <span class="type" [class.multiple]="getAgilizaModifier(modifier.id)?.isMultiple">
+                  {{ getAgilizaModifier(modifier.id)?.isMultiple ? 'Múltiple' : 'Único' }}
+                </span>
+              </td>
+              <td>
+                {{ getAgilizaModifier(modifier.id)?.minQuantity }} - {{ getAgilizaModifier(modifier.id)?.maxQuantity }}
+              </td>
+              <td>
+                <span class="status" [class.integrated]="modifier.status === 'integrated'" [class.pending]="modifier.status === 'pending'">
+                  {{ modifier.status === 'integrated' ? 'Integrado' : 'Pendiente' }}
+                </span>
+              </td>
+            </ng-container>
+            <ng-template #agilizaEmpty>
+              <td>-</td>
+              <td>-</td>
+              <td>-</td>
+              <td>-</td>
+              <td>
+                <span class="status">No</span>
+              </td>
+            </ng-template>
+
+            <!-- Botón de opciones -->
+            <td>
+              <button 
+                class="options-button" 
+                (click)="toggleOptions(modifier.id)"
+                [class.expanded]="isExpanded(modifier.id)"
+              >
+                <i class="fa-solid" [class.fa-chevron-down]="!isExpanded(modifier.id)" [class.fa-chevron-up]="isExpanded(modifier.id)"></i>
+              </button>
+            </td>
+          </tr>
+
+          <!-- Tabla de opciones -->
+          <tr class="options-row" *ngIf="isExpanded(modifier.id)">
+            <td colspan="11">
+              <div class="options-container">
+                <table class="options-table">
+                  <thead>
+                    <tr>
+                      <th>ID</th>
+                      <th>Nombre</th>
+                      <th>Precio</th>
+                      <th>Stock</th>
+                      <th>Estado</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <!-- Opciones RESTPE -->
+                    <ng-container *ngIf="modifier.existsInRestpe">
+                      <tr *ngFor="let option of getRestpeModifier(modifier.id)?.options">
+                        <td>{{ option.id }}</td>
+                        <td>{{ option.name }}</td>
+                        <td>{{ option.price | currency }}</td>
+                        <td>{{ option.stock }}</td>
+                        <td>
+                          <span class="status" [class.active]="option.status === 'active'">
+                            {{ option.status === 'active' ? 'Activo' : 'Inactivo' }}
+                          </span>
+                        </td>
+                      </tr>
+                    </ng-container>
+
+                    <!-- Opciones AGILIZA360 -->
+                    <ng-container *ngIf="modifier.existsInAgiliza360">
+                      <tr *ngFor="let option of getAgilizaModifier(modifier.id)?.options">
+                        <td>{{ option.id }}</td>
+                        <td>{{ option.name }}</td>
+                        <td>{{ option.price | currency }}</td>
+                        <td>{{ option.stock }}</td>
+                        <td>
+                          <span class="status" [class.active]="option.status === 'active'">
+                            {{ option.status === 'active' ? 'Activo' : 'Inactivo' }}
+                          </span>
+                        </td>
+                      </tr>
+                    </ng-container>
+                  </tbody>
+                </table>
+              </div>
+            </td>
+          </tr>
+        </ng-container>
+      </ng-container>
+    </tbody>
+  </table>
+
+  <div class="pagination" *ngIf="totalPages > 1">
+    <button 
+      class="pagination-button" 
+      [class.disabled]="currentPage === 1"
+      (click)="changePage(currentPage - 1)"
+    >
+      Anterior
+    </button>
+    <div class="page-numbers">
+      <button 
+        *ngFor="let page of [].constructor(totalPages); let i = index" 
+        class="page-number"
+        [class.active]="currentPage === i + 1"
+        (click)="changePage(i + 1)"
+      >
+        {{ i + 1 }}
+      </button>
+    </div>
+    <button 
+      class="pagination-button" 
+      [class.disabled]="currentPage === totalPages"
+      (click)="changePage(currentPage + 1)"
+    >
+      Siguiente
+    </button>
+  </div>
+</div>

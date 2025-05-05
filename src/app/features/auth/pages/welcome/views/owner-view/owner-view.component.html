@@ -6,7 +6,7 @@
       <div class="brand-card" *ngFor="let brand of brands">
         <h3>{{ brand.name }}</h3>
         <p>{{ brand.description }}</p>
-        <button routerLink="/brand/{{brand._id}}" class="btn btn-primary">
+        <button routerLink="/brand/{{brand._id}}" (click)="setBrandSubdomain(brand._id)" class="btn btn-primary">
           Ir a la marca
         </button>
       </div>

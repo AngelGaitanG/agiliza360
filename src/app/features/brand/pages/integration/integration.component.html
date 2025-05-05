@@ -1,0 +1,62 @@
+<div class="introduction" *ngIf="showIntroduction">
+    <h1>Integración</h1>
+    <div class="introduction-content">
+        <p>
+            Traslada la informacion de Restaurant.pe al sistema de Agiliza360 de manera rapida y sencilla.
+        </p>
+        <p>Durante la integración, el sistema realizará lo siguiente:</p>
+        <ul class="steps">
+            <li>
+                <p>Comparará los elementos existentes en tu sistema con los de Agiliza360</p>
+            </li>
+            <li>
+                <p>Te mostrará una lista detallada por cada tipo de elemento:</p>
+                <ul>
+                    <li>Categorías de productos</li>
+                    <li>Modificadores y opciones</li>
+                    <li>Productos</li>
+                </ul>
+            </li>
+            <li>
+                <p>Podrás revisar y seleccionar qué elementos deseas integrar</p>
+            </li>
+        </ul>
+        <div class="introduction-buttons">
+            <button class="btn btn-primary" (click)="loadComparison()">
+                <i class="fa-solid fa-cloud-arrow-down"></i>
+                {{loading ? 'Cargando...' : 'Comenzar'}}
+            </button>
+        </div>
+    </div>
+</div>
+<div class="comparison" *ngIf="!showIntroduction">
+    <div class="header-steps">
+        <div class="step" [class.active]="currentStep === 1" (click)="changeStep(1)">
+            <i class="fa-solid fa-list"></i>
+            <p>Categorías</p>
+        </div>
+        <div class="step" [class.active]="currentStep === 2" (click)="changeStep(2)">
+            <i class="fa-solid fa-list"></i>
+            <p>Modificadores</p>
+        </div>
+        <div class="step" [class.active]="currentStep === 3" (click)="changeStep(3)">
+            <i class="fa-solid fa-list"></i>
+            <p>Productos</p>
+        </div>
+
+    </div>
+    <div class="comparison-content">
+        @switch (currentStep) {
+            @case (1) {
+                <app-integration-categories [categoriesInfo]="categoriesInfo"></app-integration-categories>
+            }
+            @case (2) {
+                <app-integration-modifiers [modifiersInfo]="modifiersInfo"></app-integration-modifiers>
+            }
+            @case (3) {
+                <app-integration-products [productsInfo]="productsInfo"></app-integration-products>
+            }
+        }
+    </div>
+</div>
+

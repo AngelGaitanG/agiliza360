@@ -23,9 +23,12 @@ export class OwnerViewComponent implements OnInit {
   ngOnInit(): void {
     this.loadBrands();
   }
-
-  navigateToBrand(brandId: string): void {
-    this.router.navigate(['/brand', brandId]);
+  
+  setBrandSubdomain(brandId: string): void {
+    console.log(brandId, 'brandId');
+    console.log(this.brands, 'brands dentro del set');
+    const subdomain = this.brands.find(brand => brand._id === brandId)?.subdomain;
+    localStorage.setItem('brand-subdomain', subdomain || '');
   }
 
   private loadBrands(): void {
@@ -35,6 +38,7 @@ export class OwnerViewComponent implements OnInit {
     this.brandService.getAllBrands().subscribe({
       next: (brands) => {
         this.brands = brands;
+        console.log(brands, 'brands');
         this.loading = false;
       },
       error: (err) => {
