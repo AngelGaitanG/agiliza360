@@ -13,17 +13,39 @@
         <p>{{ layoutState.type === 'ADMIN' ? 'ADMIN' : layoutState.type === 'BRAND' ? 'MARCA' : 'LOCAL' }}</p>
     </div>
     <ul class="menu-list" [class.menu-changing]="isMenuChanging">
-        <li *ngFor="let item of menuItems" class="menu-item">
+        <li *ngFor="let item of menuItems; let i = index" class="menu-item" [class.has-children]="item.children?.length">
             <a [routerLink]="item.path" 
                routerLinkActive="active" 
                [title]="item.title"
-               class="menu-link">
+               class="menu-link"
+               (click)="item.children?.length ? toggleSubmenu(i, $event) : null">
                 <i class="fi {{ item.icon }}"></i>
                 <span class="tooltip">{{ item.title }}</span>
                 <div class="menu-item-line" *ngIf="sidebarOpen">
                     {{ item.title }}
+                    <ng-container *ngIf="item.children?.length">
+                        <i class="fa-solid" [ngClass]="openMenuIndex === i ? 'fa-chevron-up' : 'fa-chevron-down'" style="margin-left: 8px; font-size: 0.8em;"></i>
+                    </ng-container>
                 </div>
             </a>
+            <!-- Submenú expandido -->
+            <div *ngIf="sidebarOpen && item.children?.length && openMenuIndex === i" class="children-menu expanded">
+                <div class="submenu-line"></div>
+                <ul class="submenu-list">
+                    <li *ngFor="let sub of item.children" [routerLink]="['/menu', sub.path]">
+                        {{ sub.title }}
+                    </li>
+                </ul>
+            </div>
+            <!-- Submenú popup -->
+            <div *ngIf="!sidebarOpen && item.children?.length && openMenuIndex === i" class="children-menu popup">
+                <div class="submenu-line"></div>
+                <ul class="submenu-list">
+                    <li *ngFor="let sub of item.children" [routerLink]="['/menu', sub.path]">
+                        {{ sub.title }}
+                    </li>
+                </ul>
+            </div>
         </li>
     </ul>
     <button class="open-sidebar" (click)="toggleSidebar()">

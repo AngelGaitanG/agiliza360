@@ -28,6 +28,7 @@ export class MainSidebarComponent implements OnInit {
   menuItems: MenuItem[] = [];
   isMenuChanging: boolean = false;
   userRole: string = 'MANAGER'; // Valor por defecto
+  openMenuIndex: number | null = null; // Nueva propiedad para controlar qué menú está abierto
 
   constructor(
     private authService: AuthService,
@@ -39,6 +40,11 @@ export class MainSidebarComponent implements OnInit {
 
   toggleSidebar() {
     this.sidebarOpen = !this.sidebarOpen;
+  }
+
+  toggleSubmenu(index: number, event: Event): void {
+    event.preventDefault(); // Prevenir la navegación por defecto
+    this.openMenuIndex = this.openMenuIndex === index ? null : index;
   }
 
   ngOnInit(): void {

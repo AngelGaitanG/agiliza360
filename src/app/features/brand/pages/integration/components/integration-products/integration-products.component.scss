@@ -317,20 +317,26 @@
     }
 
     .truncate {
-      max-width: 0;
+      max-width: 0px;
+      white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
-      white-space: nowrap;
       position: relative;
 
-      &:hover {
-        overflow: visible;
-        z-index: 1;
-        background: white;
-        box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.1);
-        border-radius: 0.25rem;
-        padding: 0.25rem 0.5rem;
-        margin: -0.25rem -0.5rem;
+      &:hover::after {
+        content: attr(title);
+        position: absolute;
+        left: 0;
+        top: 100%;
+        z-index: 1000;
+        background-color: rgba(0, 0, 0, 0.8);
+        color: white;
+        padding: 8px 12px;
+        border-radius: 4px;
+        font-size: 14px;
+        white-space: normal;
+        max-width: 300px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
       }
     }
   }

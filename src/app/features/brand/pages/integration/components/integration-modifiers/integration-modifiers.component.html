@@ -38,7 +38,7 @@
               </td>
               <td>
                 <span class="status" [class.integrated]="modifier.status === 'integrated'" [class.pending]="modifier.status === 'pending'">
-                  {{ modifier.status === 'integrated' ? 'Integrado' : 'Pendiente' }}
+                  {{ modifier.existsInRestpe ? 'Integrado' : 'Pendiente' }}
                 </span>
               </td>
             </ng-container>
@@ -65,8 +65,8 @@
                 {{ getAgilizaModifier(modifier.id)?.minQuantity }} - {{ getAgilizaModifier(modifier.id)?.maxQuantity }}
               </td>
               <td>
-                <span class="status" [class.integrated]="modifier.status === 'integrated'" [class.pending]="modifier.status === 'pending'">
-                  {{ modifier.status === 'integrated' ? 'Integrado' : 'Pendiente' }}
+                <span class="status" [class.integrated]="modifier.existsInAgiliza360" [class.pending]="!modifier.existsInAgiliza360">
+                  {{ modifier.existsInAgiliza360 ? 'Integrado' : 'Pendiente' }}
                 </span>
               </td>
             </ng-container>

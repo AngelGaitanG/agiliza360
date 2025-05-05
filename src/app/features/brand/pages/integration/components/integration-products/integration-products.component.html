@@ -38,8 +38,8 @@
                 </span>
               </td>
               <td>
-                <span class="status" [class.integrated]="product.status === 'integrated'" [class.pending]="product.status === 'pending'">
-                  {{ product.status === 'integrated' ? 'Integrado' : 'Pendiente' }}
+                <span class="status" [class.integrated]="product.existsInRestpe" [class.pending]="!product.existsInRestpe">
+                  {{ product.existsInRestpe ? 'Integrado' : 'Pendiente' }}
                 </span>
               </td>
             </ng-container>
@@ -66,8 +66,8 @@
                 </span>
               </td>
               <td>
-                <span class="status" [class.integrated]="product.status === 'integrated'" [class.pending]="product.status === 'pending'">
-                  {{ product.status === 'integrated' ? 'Integrado' : 'Pendiente' }}
+                <span class="status" [class.integrated]="product.existsInAgiliza360" [class.pending]="!product.existsInAgiliza360">
+                  {{ product.existsInAgiliza360 ? 'Integrado' : 'Pendiente' }}
                 </span>
               </td>
             </ng-container>

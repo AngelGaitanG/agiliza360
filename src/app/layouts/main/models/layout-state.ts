@@ -9,4 +9,5 @@ export interface LayoutState {
     path: string;
     title: string;
     icon: string;
+    children?: {path: string, title: string}[];
   }
