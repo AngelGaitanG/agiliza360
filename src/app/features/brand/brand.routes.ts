@@ -11,12 +11,30 @@ export const BRAND_ROUTES: Routes = [
             // },
             {
                 path: ':id/menu',
-                loadComponent: () => import('./pages/menu/menu.component').then(m => m.MenuComponent)
+                loadComponent: () => import('./pages/menu/menu.component').then(m => m.MenuComponent),
             },
             {
                 path: ':id/integration',
                 loadComponent: () => import('./pages/integration/integration.component').then(m => m.IntegrationComponent)
             },
+            {
+                path: ':id/products',
+                loadComponent: () => import('./pages/products/products.component').then(m => m.ProductsComponent)
+            },
+            {
+                path: ':id/modifiers',
+                loadComponent: () => import('./pages/modifiers/modifiers.component').then(m => m.ModifiersComponent)
+            },
+            {
+                path: ':id/options',
+                loadComponent: () => import('./pages/options/options.component').then(m => m.OptionsComponent)
+            },
+            {
+                path: ':id/categories',
+                loadComponent: () => import('./pages/categories/categories.component').then(m => m.CategoriesComponent)
+            },
+            
+
             // {
             //     path: ':id/branches',
             //     loadComponent: () => import('./pages/branches/branches.component').then(m => m.BranchesComponent)

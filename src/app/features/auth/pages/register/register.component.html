@@ -1,0 +1,74 @@
+<div class="register-container">
+  <app-notification></app-notification>
+  <div class="register-form">
+    <h2 class="register-title">AGILIZA 360 LOGO</h2>
+    <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+      <hr>
+      <div class="form-group">
+        <input type="text" id="name" formControlName="name" required placeholder=" " autocomplete="off">
+        <label for="name">NOMBRE COMPLETO</label>
+        <app-input-error 
+          [message]="'Por favor, ingrese su nombre completo'" 
+          [show]="!!(registerForm.get('name')?.invalid && registerForm.get('name')?.touched)">
+        </app-input-error>
+      </div>
+      <hr>
+      <div class="form-group">
+        <input type="email" id="email" formControlName="email" required placeholder=" " autocomplete="off">
+        <label for="email">EMAIL</label>
+        <app-input-error 
+          [message]="'Por favor, ingrese un email válido'" 
+          [show]="!!(registerForm.get('email')?.invalid && registerForm.get('email')?.touched)">
+        </app-input-error>
+      </div>
+      <hr>
+      <div class="form-group">
+        <input [type]="showPassword ? 'text' : 'password'" id="password" formControlName="password" required placeholder=" " autocomplete="off">
+        <label for="password">CONTRASEÑA</label>
+        <button type="button" class="toggle-password" (click)="togglePassword()">
+          <i class="icon-eye" [class.icon-eye-off]="showPassword"></i>
+        </button>
+        <app-input-error 
+          [message]="getPasswordErrorMessage()" 
+          [show]="!!(registerForm.get('password')?.invalid && registerForm.get('password')?.touched)">
+        </app-input-error>
+      </div>
+      <hr>
+      <div class="form-group">
+        <input [type]="showConfirmPassword ? 'text' : 'password'" id="confirmPassword" formControlName="confirmPassword" required placeholder=" " autocomplete="off">
+        <label for="confirmPassword">CONFIRMAR CONTRASEÑA</label>
+        <button type="button" class="toggle-password" (click)="toggleConfirmPassword()">
+          <i class="icon-eye" [class.icon-eye-off]="showConfirmPassword"></i>
+        </button>
+        <app-input-error 
+          [message]="'Las contraseñas no coinciden'" 
+          [show]="!!(registerForm.get('confirmPassword')?.errors?.['mismatch'] && registerForm.get('confirmPassword')?.touched)">
+        </app-input-error>
+      </div>
+      <div class="form-group checkbox-group">
+        <div class="checkbox-container">
+          <input type="checkbox" id="terms" formControlName="terms" required>
+          <label for="terms">Acepto los términos y condiciones</label>
+        </div>
+        <app-input-error 
+          [message]="'Debe aceptar los términos y condiciones'" 
+          [show]="!!(registerForm.get('terms')?.invalid && registerForm.get('terms')?.touched)">
+        </app-input-error>
+      </div>
+      <div class="form-footer">
+        <button type="submit" class="btn btn-primary" [disabled]="loading || registerForm.invalid">
+          <span *ngIf="!loading">Registrarse</span>
+          <span *ngIf="loading" class="loader"></span>
+        </button>
+        <app-input-error class="error-message"
+          [message]="error || ''" 
+          [show]="!!error">
+        </app-input-error>
+      </div>
+    </form>
+  </div>
+  <div class="login-section">
+    <p class="login-title">¿Ya tienes una cuenta?</p>
+    <button class="btn btn-secondary" routerLink="/auth/login">Iniciar Sesión</button>
+  </div>
+</div>

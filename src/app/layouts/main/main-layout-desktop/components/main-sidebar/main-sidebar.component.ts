@@ -48,38 +48,39 @@ export class MainSidebarComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    // Guardamos el tipo de layout actual para comparar cambios
-    let currentLayoutType = this.layoutState.type;
-    let currentBrandId = this.layoutState.brandId;
-    let currentBranchId = this.layoutState.branchId;
-    
-    // Obtenemos el rol del usuario
-    this.userRole = this.authService.getUserRole();
-    this.layoutState.role = this.userRole as 'SUPERADMIN' | 'OWNER' | 'MANAGER';
+    // Inicializamos el estado con los valores del localStorage
+    const storedBrandId = localStorage.getItem('brandId');
+    const storedBranchId = localStorage.getItem('branchId');
+    const storedLayoutType = localStorage.getItem('layoutType') as 'ADMIN' | 'BRAND' | 'BRANCH' || 'ADMIN';
+
+    // Actualizamos el estado inicial
+    this.layoutState = {
+      type: storedLayoutType,
+      role: this.userRole as 'SUPERADMIN' | 'OWNER' | 'MANAGER',
+      brandId: storedBrandId || undefined,
+      branchId: storedBranchId || undefined
+    };
+
+    // Actualizamos los items del menú con el estado inicial
+    this.updateMenuItems();
     
     // Suscripción a cambios de layout
     this.layoutService.layoutType$.subscribe((layoutType: any) => {
-      // Solo actualizamos si hay un cambio real
-      if (layoutType !== currentLayoutType) {
-        currentLayoutType = layoutType;
         this.layoutState.type = layoutType;
         
-        // Verificamos cambios en el brandId
+      // Solo actualizamos los IDs si están presentes en localStorage
         const brandId = localStorage.getItem('brandId');
-        if (brandId !== currentBrandId) {
-          currentBrandId = brandId || undefined;
-          this.layoutState.brandId = currentBrandId;
-        }
-        
-        // Verificamos cambios en el branchId
         const branchId = localStorage.getItem('branchId');
-        if (branchId !== currentBranchId) {
-          currentBranchId = branchId || undefined;
-          this.layoutState.branchId = currentBranchId;
+      
+      if (brandId) {
+        this.layoutState.brandId = brandId;
+      }
+      
+      if (branchId) {
+        this.layoutState.branchId = branchId;
         }
         
         this.updateMenuItems();
-      }
     });
 
     this.authService.authState$.subscribe((state: any) => {
@@ -92,23 +93,41 @@ export class MainSidebarComponent implements OnInit {
   }
 
   private updateMenuItems(): void {
-    // Activamos la clase de transición
     this.isMenuChanging = true;
-    
-    // Primero ponemos los items en null
     this.menuItems = [];
     
-    // Esperamos un momento y luego actualizamos con los nuevos items
+    // Verificamos que tengamos un brandId antes de actualizar
+    if (this.layoutState.type === 'BRAND' && !this.layoutState.brandId) {
+      const storedBrandId = localStorage.getItem('brandId');
+      if (storedBrandId) {
+        this.layoutState.brandId = storedBrandId;
+      } else {
+        console.warn('No se encontró brandId para el layout tipo BRAND');
+        return;
+      }
+    }
+    
     setTimeout(() => {
       switch (this.layoutState.type) {
         case 'BRAND':
-          this.menuItems = this.mainLayoutRoutes.brandMenuItems.map((item: any) => ({
+          this.menuItems = this.mainLayoutRoutes.brandMenuItems.map(item => {
+            const baseItem = {
             ...item,
             path: `/brand/${this.layoutState.brandId}/${item.path}`
-          }));
+            };
+
+            if (item.children) {
+              baseItem.children = item.children.map(child => ({
+                ...child,
+                path: `/brand/${this.layoutState.brandId}/${child.path}`
+              }));
+            }
+
+            return baseItem;
+          });
           break;
         case 'BRANCH':
-          this.menuItems = this.mainLayoutRoutes.branchMenuItems.map((item: any) => ({
+          this.menuItems = this.mainLayoutRoutes.branchMenuItems.map(item => ({
             ...item,
             path: `/branch/${this.layoutState.branchId}/${item.path}`
           }));
@@ -118,7 +137,6 @@ export class MainSidebarComponent implements OnInit {
           break;
       }
       
-      // Desactivamos la clase de transición después de un breve retraso
       setTimeout(() => {
         this.isMenuChanging = false;
       }, 50);
@@ -179,23 +197,24 @@ export class MainSidebarComponent implements OnInit {
   }
 
   switchToBrandLayout(brandId: string): void {
+    // Guardamos el brandId en localStorage
+    localStorage.setItem('brandId', brandId);
+    localStorage.setItem('layoutType', 'BRAND');
+    
+    // Actualizamos el servicio de layout
     this.layoutService.switchToBrandLayout(brandId);
+    
+    // Actualizamos el estado local
     this.layoutState.type = 'BRAND';
     this.layoutState.brandId = brandId;
     this.layoutState.branchId = undefined;
+    
+    // Actualizamos los items del menú
     this.updateMenuItems();
   }
 
   onLogoutClick(): void {
     // Eliminar datos de sesión
-    localStorage.removeItem('layoutType');
-    localStorage.removeItem('brandId');
-    localStorage.removeItem('branchId');
-    
-    // Limpiar estado de autenticación
-    this.authService.removeToken();
-    
-    // Redireccionar a la página de login
-    this.router.navigate(['/login']);
+    this.authService.logout();
   }
 }

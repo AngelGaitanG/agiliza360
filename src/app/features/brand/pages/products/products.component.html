@@ -1,0 +1,280 @@
+<div class="products-container">
+    <!-- Header -->
+    <div class="products-header">
+        <h1>Productos</h1>
+        <button class="btn-primary" (click)="openCreateModal()">
+            <i class="fi fi-rr-plus"></i>
+            Nuevo Producto
+        </button>
+    </div>
+
+    <!-- Loading State -->
+    <div class="loading-container" *ngIf="loading">
+        <div class="loader"></div>
+    </div>
+
+    <!-- Products Grid -->
+    <div class="products-grid" *ngIf="!loading">
+        <!-- Product Card -->
+        <div class="product-card" *ngFor="let product of products" (click)="openDetailsModal(product)">
+            <div class="product-image">
+                <img [src]="product.image || imagePlaceholder" [alt]="product.name">
+                <button class="btn-icon delete-btn" (click)="deleteProduct(product._id, $event)">
+                    <i class="fi fi-rr-trash"></i>
+                </button>
+            </div>
+            <div class="product-info">
+                <h3>{{ product.name }}</h3>
+                <p class="product-description">{{ getTruncatedDescription(product.description) }}</p>
+                <div class="product-price">
+                    {{ product.basePrice | currency:'USD':'symbol':'1.2-2' }}
+                </div>
+            </div>
+        </div>
+
+        <!-- Empty State -->
+        <div class="empty-state" *ngIf="products.length === 0">
+            <i class="fi fi-rr-info"></i>
+            <p>No hay productos creados</p>
+            <button class="btn-secondary">
+                Crear primer producto
+            </button>
+        </div>
+    </div>
+
+    <!-- Product Details Modal -->
+    <div class="modal-overlay" *ngIf="showDetailsModal && selectedProduct">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Detalles del Producto</h2>
+                <button class="btn-icon" (click)="closeDetailsModal()">
+                    <i class="fi fi-rr-cross"></i>
+                </button>
+            </div>
+            <div class="product-details">
+                <div class="detail-image">
+                    <img [src]="selectedProduct.image || imagePlaceholder" [alt]="selectedProduct.name">
+                </div>
+                <div class="detail-info">
+                    <h3>{{ selectedProduct.name }}</h3>
+                    <p class="description">{{ selectedProduct.description }}</p>
+                    <div class="detail-row">
+                        <span class="label">Precio:</span>
+                        <span class="value">{{ selectedProduct.basePrice | currency:'USD':'symbol':'1.2-2' }}</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="label">Categoría:</span>
+                        <span class="value">{{ selectedProduct.category || 'Sin categoría' }}</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="label">Tiempo:</span>
+                        <span class="value">{{ selectedProduct.preparationTime }} minutos</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="label">Estado:</span>
+                        <span class="status-badge" [class.active]="selectedProduct.isActive">
+                            {{ selectedProduct.isActive ? 'Activo' : 'Inactivo' }}
+                        </span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="label">Ingredientes:</span>
+                        <span class="value">{{ selectedProduct.ingredients.join(', ') }}</span>
+                    </div>
+                    <div class="detail-row nutrition-info">
+                        <span class="label">Nutrición:</span>
+                        <div class="nutrition-values">
+                            <span>Calorías: {{ selectedProduct.nutritionalInfo.calories }}</span>
+                            <span>Proteínas: {{ selectedProduct.nutritionalInfo.proteins }}g</span>
+                            <span>Carbos: {{ selectedProduct.nutritionalInfo.carbs }}g</span>
+                            <span>Grasas: {{ selectedProduct.nutritionalInfo.fats }}g</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary" (click)="closeDetailsModal()">Cerrar</button>
+                <button class="btn-primary">
+                    <i class="fi fi-rr-edit"></i>
+                    Editar
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Create Product Modal -->
+    <div class="modal-overlay" *ngIf="showCreateModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Nuevo Producto</h2>
+                <button class="btn-icon" (click)="closeCreateModal()">
+                    <i class="fi fi-rr-cross"></i>
+                </button>
+            </div>
+            <form [formGroup]="productForm" (ngSubmit)="createProduct()" class="create-form">
+                <div class="form-grid">
+                    <!-- Información Básica -->
+                    <div class="form-section">
+                        <h3>Información Básica</h3>
+                        <div class="form-group">
+                            <label for="name">Nombre del Producto*</label>
+                            <input 
+                                type="text" 
+                                id="name" 
+                                formControlName="name"
+                                placeholder="Ej: Hamburguesa Clásica"
+                            >
+                            <app-input-error 
+                                message="El nombre debe tener al menos 3 caracteres"
+                                [show]="(productForm.get('name')?.invalid ?? false) && (productForm.get('name')?.touched ?? false)">
+                            </app-input-error>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="description">Descripción</label>
+                            <textarea 
+                                id="description" 
+                                formControlName="description"
+                                rows="3"
+                                placeholder="Describe el producto..."
+                            ></textarea>
+                            <app-input-error 
+                                message="La descripción debe tener al menos 10 caracteres"
+                                [show]="(productForm.get('description')?.invalid ?? false) && (productForm.get('description')?.touched ?? false)">
+                            </app-input-error>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="basePrice">Precio Base*</label>
+                            <input 
+                                type="number" 
+                                id="basePrice" 
+                                formControlName="basePrice"
+                                min="0"
+                                step="0.01"
+                            >
+                            <app-input-error 
+                                message="El precio debe ser mayor a 0"
+                                [show]="(productForm.get('basePrice')?.invalid ?? false) && (productForm.get('basePrice')?.touched ?? false)">
+                            </app-input-error>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="categoryId">Categoría*</label>
+                            <input 
+                                type="text" 
+                                id="categoryId" 
+                                formControlName="categoryId"
+                                placeholder="ID de la categoría"
+                            >
+                            <app-input-error 
+                                message="La categoría es requerida"
+                                [show]="(productForm.get('categoryId')?.invalid ?? false) && (productForm.get('categoryId')?.touched ?? false)">
+                            </app-input-error>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="image">URL de la Imagen</label>
+                            <input 
+                                type="url" 
+                                id="image" 
+                                formControlName="image"
+                                placeholder="https://ejemplo.com/imagen.jpg"
+                            >
+                        </div>
+                    </div>
+
+                    <!-- Detalles del Producto -->
+                    <div class="form-section">
+                        <h3>Detalles del Producto</h3>
+                        <div class="form-group">
+                            <label for="preparationTime">Tiempo de Preparación (minutos)*</label>
+                            <input 
+                                type="number" 
+                                id="preparationTime" 
+                                formControlName="preparationTime"
+                                min="1"
+                            >
+                        </div>
+
+                        <div class="form-group">
+                            <label for="ingredients">Ingredientes</label>
+                            <textarea 
+                                id="ingredients" 
+                                formControlName="ingredients"
+                                rows="2"
+                                placeholder="Ej: Pan, Carne, Lechuga, Tomate"
+                                (blur)="formatIngredients($event)"
+                            ></textarea>
+                        </div>
+
+                        <div class="form-group checkbox-group">
+                            <label class="checkbox-label">
+                                <input 
+                                    type="checkbox" 
+                                    formControlName="isCombo"
+                                >
+                                Es un combo
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Información Nutricional -->
+                    <div class="form-section" formGroupName="nutritionalInfo">
+                        <h3>Información Nutricional</h3>
+                        <div class="nutrition-grid">
+                            <div class="form-group">
+                                <label for="calories">Calorías</label>
+                                <input 
+                                    type="number" 
+                                    id="calories" 
+                                    formControlName="calories"
+                                    min="0"
+                                >
+                            </div>
+
+                            <div class="form-group">
+                                <label for="proteins">Proteínas (g)</label>
+                                <input 
+                                    type="number" 
+                                    id="proteins" 
+                                    formControlName="proteins"
+                                    min="0"
+                                >
+                            </div>
+
+                            <div class="form-group">
+                                <label for="carbs">Carbohidratos (g)</label>
+                                <input 
+                                    type="number" 
+                                    id="carbs" 
+                                    formControlName="carbs"
+                                    min="0"
+                                >
+                            </div>
+
+                            <div class="form-group">
+                                <label for="fats">Grasas (g)</label>
+                                <input 
+                                    type="number" 
+                                    id="fats" 
+                                    formControlName="fats"
+                                    min="0"
+                                >
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn-secondary" (click)="closeCreateModal()">
+                        Cancelar
+                    </button>
+                    <button type="submit" class="btn-primary" [disabled]="productForm.invalid || loading">
+                        <i class="fi fi-rr-plus"></i>
+                        {{ loading ? 'Creando...' : 'Crear Producto' }}
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

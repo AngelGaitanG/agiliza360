@@ -12,15 +12,20 @@ export class MainLayoutRoutes {
   brandMenuItems: MenuItem[] = [
     { path: 'dashboard', title: 'Dashboard', icon: 'fi-rr-apps' },
     { path: 'branches', title: 'Sucursales', icon: 'fi-rr-window-restore' },
-    { path: 'menu', title: 'Menú', icon: 'fi-rr-restaurant', children: [
-      { path: 'categories', title: 'Categorías' },
-      { path: 'products', title: 'Productos' },
-      { path: 'modifiers', title: 'Modificadores' },
-      { path: 'options', title: 'Opciones' }
-    ] },
+    { 
+        path: 'menu', 
+        title: 'Menú', 
+        icon: 'fi-rr-restaurant', 
+        children: [
+            { path: 'categories', title: 'Categorías' },
+            { path: 'products', title: 'Productos' },
+            { path: 'modifiers', title: 'Modificadores' },
+            { path: 'options', title: 'Opciones' },
+            { path: 'integration', title: 'Integración' }
+        ] 
+    },
     { path: 'staff', title: 'Personal', icon: 'fi-rr-users-alt' },
     { path: 'settings', title: 'Configuración', icon: 'fi-rr-document-gear' },
-    { path: 'integration', title: 'Integración', icon: 'fi-rr-cloud-download' },
   ];
 
   branchMenuItems: MenuItem[] = [

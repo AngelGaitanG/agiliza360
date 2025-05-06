@@ -3,9 +3,12 @@ import { provideRouter } from '@angular/router';
 import { routes } from './app.routes';
 import { provideHttpClient } from '@angular/common/http';
 
+import { httpInterceptorProviders } from './core/providers/interceptors.provider';
+
 export const appConfig: ApplicationConfig = {
   providers: [
     provideRouter(routes),
-    provideHttpClient()
+    provideHttpClient(),
+    httpInterceptorProviders
   ]
 };

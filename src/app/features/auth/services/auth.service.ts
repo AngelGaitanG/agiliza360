@@ -4,7 +4,9 @@ import { BehaviorSubject, Observable, tap } from 'rxjs';
 import { environment } from '../../../../environments/environment';
 import { User } from '../models/user.model';
 import { SigninResponse } from '../models/signin-response.model';
-
+import { RegisterDto } from '../models/register.dto';
+import { RegisterResponse } from '../models/register-response.model';
+import { Router } from '@angular/router';
 @Injectable({
   providedIn: 'root'
 })
@@ -13,7 +15,7 @@ export class AuthService {
   private readonly TOKEN_KEY = 'auth_token';
   public authState$ = new BehaviorSubject<{user: User | null}>({user: null});
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, private router: Router) {
     const userData = localStorage.getItem('currentUser');
     console.log('User data in AuthService constructor:', userData);
     if (userData) {
@@ -46,11 +48,19 @@ export class AuthService {
     );
   }
 
+  register(registerDto: RegisterDto): Observable<RegisterResponse> {
+    return this.http.post<RegisterResponse>(`${environment.apiUrl}/auth/signup`, registerDto);
+  }
+
   logout(): void {
     localStorage.removeItem(this.TOKEN_KEY);
     localStorage.removeItem('currentUser');
+    localStorage.removeItem('layoutType');
+    localStorage.removeItem('brandId');
+    localStorage.removeItem('brandSubdomain');
     this.currentUserSubject.next(null);
     this.authState$.next({user: null});
+    this.router.navigate(['/auth/login']);
   }
 
   getToken(): string | null {

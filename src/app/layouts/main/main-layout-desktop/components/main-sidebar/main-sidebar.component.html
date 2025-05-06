@@ -32,7 +32,9 @@
             <div *ngIf="sidebarOpen && item.children?.length && openMenuIndex === i" class="children-menu expanded">
                 <div class="submenu-line"></div>
                 <ul class="submenu-list">
-                    <li *ngFor="let sub of item.children" [routerLink]="['/menu', sub.path]">
+                    <li *ngFor="let sub of item.children" 
+                        [routerLink]="[sub.path]"
+                        routerLinkActive="active">
                         {{ sub.title }}
                     </li>
                 </ul>
@@ -41,7 +43,9 @@
             <div *ngIf="!sidebarOpen && item.children?.length && openMenuIndex === i" class="children-menu popup">
                 <div class="submenu-line"></div>
                 <ul class="submenu-list">
-                    <li *ngFor="let sub of item.children" [routerLink]="['/menu', sub.path]">
+                    <li *ngFor="let sub of item.children" 
+                        [routerLink]="[sub.path]"
+                        routerLinkActive="active">
                         {{ sub.title }}
                     </li>
                 </ul>

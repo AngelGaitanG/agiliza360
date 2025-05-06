@@ -1,0 +1,116 @@
+<div class="categories-container">
+    <!-- Header -->
+    <div class="categories-header">
+        <h1>Categorías</h1>
+        <button class="btn-primary" (click)="openCreateModal()">
+            <i class="fi fi-rr-plus"></i>
+            Nueva Categoría
+        </button>
+    </div>
+
+    <!-- Loading State -->
+    <div class="loading-container" *ngIf="loading">
+        <div class="loader"></div>
+    </div>
+
+    <!-- Categories Table -->
+    <div class="table-container" *ngIf="!loading">
+        <table class="categories-table" *ngIf="categories.length > 0">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nombre</th>
+                    <th>Descripción</th>
+                    <th>Productos</th>
+                    <th>Estado</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let category of categories">
+                    <td>
+                        <span class="truncated-id" [title]="category._id">
+                            {{ category._id | slice:0:8 }}...
+                        </span>
+                    </td>
+                    <td>{{ category.name }}</td>
+                    <td>{{ category.description }}</td>
+                    <td>{{ category.products?.length || 0 }} productos</td>
+                    <td>
+                        <span class="status-badge" [class.active]="category.isActive">
+                            {{ category.isActive ? 'Activa' : 'Inactiva' }}
+                        </span>
+                    </td>
+                    <td class="actions">
+                        <button class="btn-icon" title="Editar">
+                            <i class="fi fi-rr-edit"></i>
+                        </button>
+                        <button class="btn-icon" (click)="deleteCategory(category._id)" title="Eliminar">
+                            <i class="fi fi-rr-trash"></i>
+                        </button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <!-- Empty State -->
+        <div class="empty-state" *ngIf="categories.length === 0">
+            <i class="fi fi-rr-info"></i>
+            <p>No hay categorías creadas</p>
+            <button class="btn-secondary" (click)="openCreateModal()">
+                Crear primera categoría
+            </button>
+        </div>
+    </div>
+
+    <!-- Create Category Modal -->
+    <div class="modal-overlay" *ngIf="showCreateModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Nueva Categoría</h2>
+                <button class="btn-icon" (click)="closeCreateModal()">
+                    <i class="fi fi-rr-cross"></i>
+                </button>
+            </div>
+            <form [formGroup]="categoryForm" (ngSubmit)="createCategory()">
+                <div class="form-group">
+                    <label for="name">Nombre</label>
+                    <input 
+                        type="text" 
+                        id="name" 
+                        formControlName="name" 
+                        placeholder="Ej: Bebidas, Postres, etc."
+                    >
+                    <app-input-error 
+                        [message]="'El nombre debe tener al menos 3 caracteres'" 
+                        [show]="(categoryForm.get('name')?.invalid ?? false) && (categoryForm.get('name')?.touched ?? false)">
+                    </app-input-error>
+                </div>
+
+                <div class="form-group">
+                    <label for="description">Descripción</label>
+                    <textarea 
+                        id="description" 
+                        formControlName="description" 
+                        rows="4"
+                        placeholder="Describe brevemente esta categoría..."
+                    ></textarea>
+                    <app-input-error 
+                        [message]="'La descripción debe tener al menos 10 caracteres'" 
+                        [show]="(categoryForm.get('description')?.invalid ?? false) && (categoryForm.get('description')?.touched ?? false)">
+                    </app-input-error>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn-secondary" (click)="closeCreateModal()">
+                        Cancelar
+                    </button>
+                    <button type="submit" class="btn-primary" [disabled]="categoryForm.invalid || loading">
+                        <span *ngIf="!loading">Crear Categoría</span>
+                        <div class="loader" *ngIf="loading"></div>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
