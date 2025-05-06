@@ -1,1 +1,144 @@
-<h1>Modifiers</h1>
+<div class="modifiers-container">
+    <div class="header">
+        <h1>Modificadores</h1>
+        <button class="btn-primary" (click)="openCreateModal()">
+            <i class="fas fa-plus"></i>
+            Crear Modificador
+        </button>
+    </div>
+
+    <!-- Tabla de Modificadores -->
+    <div class="table-container">
+        <table *ngIf="!loading && modifiers.length > 0">
+            <thead>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Descripción</th>
+                    <th>Mín. Selecciones</th>
+                    <th>Máx. Selecciones</th>
+                    <th>Opciones</th>
+                    <th>Estado</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let modifier of modifiers">
+                    <td>{{ modifier.name }}</td>
+                    <td>{{ modifier.description || 'Sin descripción' }}</td>
+                    <td>{{ modifier.minSelections }}</td>
+                    <td>{{ modifier.maxSelections }}</td>
+                    <td>{{ modifier.options?.length || 0 }} opciones</td>
+                    <td>
+                        <span class="status-badge" [class.active]="modifier.isActive">
+                            {{ modifier.isActive ? 'Activo' : 'Inactivo' }}
+                        </span>
+                    </td>
+                    <td class="actions">
+                        <button class="btn-icon" title="Editar">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="btn-icon delete" (click)="deleteModifier(modifier._id)" title="Eliminar">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <!-- Estado de carga -->
+        <div class="loading-state" *ngIf="loading">
+            <i class="fas fa-spinner fa-spin"></i>
+            <p>Cargando modificadores...</p>
+        </div>
+
+        <!-- Estado vacío -->
+        <div class="empty-state" *ngIf="!loading && modifiers.length === 0">
+            <i class="fas fa-box-open"></i>
+            <p>No hay modificadores creados</p>
+            <button class="btn-primary" (click)="openCreateModal()">
+                Crear primer modificador
+            </button>
+        </div>
+    </div>
+
+    <!-- Modal de Creación -->
+    <div class="modal" *ngIf="showCreateModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Crear Modificador</h2>
+                <button class="btn-icon" (click)="closeCreateModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+
+            <form [formGroup]="modifierForm" (ngSubmit)="createModifier()">
+                <div class="form-group">
+                    <label for="name">Nombre *</label>
+                    <input 
+                        type="text" 
+                        id="name" 
+                        formControlName="name" 
+                        placeholder="Ej: Tamaño de la bebida"
+                    >
+                    <app-input-error 
+                        [message]="'El nombre debe tener al menos 3 caracteres'" 
+                        [show]="(modifierForm.get('name')?.invalid ?? false) && (modifierForm.get('name')?.touched ?? false)"
+                    ></app-input-error>
+                </div>
+
+                <div class="form-group">
+                    <label for="description">Descripción</label>
+                    <textarea 
+                        id="description" 
+                        formControlName="description" 
+                        placeholder="Describe el propósito de este modificador"
+                        rows="3"
+                    ></textarea>
+                    <app-input-error 
+                        [message]="'La descripción debe tener al menos 10 caracteres'" 
+                        [show]="(modifierForm.get('description')?.invalid ?? false) && (modifierForm.get('description')?.touched ?? false)"
+                    ></app-input-error>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="minSelections">Mínimo de Selecciones *</label>
+                        <input 
+                            type="number" 
+                            id="minSelections" 
+                            formControlName="minSelections" 
+                            min="0"
+                        >
+                        <app-input-error 
+                            [message]="'El mínimo de selecciones debe ser mayor o igual a 0'" 
+                            [show]="(modifierForm.get('minSelections')?.invalid ?? false) && (modifierForm.get('minSelections')?.touched ?? false)"
+                        ></app-input-error>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="maxSelections">Máximo de Selecciones *</label>
+                        <input 
+                            type="number" 
+                            id="maxSelections" 
+                            formControlName="maxSelections" 
+                            min="1"
+                        >
+                        <app-input-error 
+                            [message]="'El máximo de selecciones debe ser mayor a 0'" 
+                            [show]="(modifierForm.get('maxSelections')?.invalid ?? false) && (modifierForm.get('maxSelections')?.touched ?? false)"
+                        ></app-input-error>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn-secondary" (click)="closeCreateModal()">
+                        Cancelar
+                    </button>
+                    <button type="submit" class="btn-primary" [disabled]="modifierForm.invalid || loading">
+                        {{ loading ? 'Creando...' : 'Crear Modificador' }}
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
