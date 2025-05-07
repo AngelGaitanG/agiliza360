@@ -8,10 +8,10 @@ export class MainLayoutRoutes {
     { path: '/admin/restaurants', title: 'Restaurantes', icon: 'fi-rr-shop  ' },
     { path: '/admin/delivery-partners', title: 'Motorizados', icon: 'fi-rr-moped' },
   ];
-
+  
   brandMenuItems: MenuItem[] = [
+    { path: 'brand-configuration', title: 'Configuración', icon: 'fi-rr-document-gear' },
     { path: 'dashboard', title: 'Dashboard', icon: 'fi-rr-apps' },
-    { path: 'branches', title: 'Sucursales', icon: 'fi-rr-window-restore' },
     { 
         path: 'menu', 
         title: 'Menú', 
@@ -24,8 +24,8 @@ export class MainLayoutRoutes {
             { path: 'integration', title: 'Integración' }
         ] 
     },
+    { path: 'branches', title: 'Sucursales', icon: 'fi-rr-window-restore' },
     { path: 'staff', title: 'Personal', icon: 'fi-rr-users-alt' },
-    { path: 'settings', title: 'Configuración', icon: 'fi-rr-document-gear' },
   ];
 
   branchMenuItems: MenuItem[] = [

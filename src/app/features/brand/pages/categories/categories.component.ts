@@ -2,7 +2,7 @@ import { Component, OnInit } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { CategoriesService } from "../../services/categories.service";
-import { Category } from "../../models/category.model";
+import { Category } from "../../models/category-models/category.model";
 import { NotificationService } from "../../../../shared/services/notification.service";
 import { ActivatedRoute } from "@angular/router";
 import { InputErrorComponent } from "../../../../shared/components/input-error/input-error.component";

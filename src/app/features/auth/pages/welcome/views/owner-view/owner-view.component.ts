@@ -2,7 +2,7 @@ import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
 import { BrandService} from '../../../../../../features/brand/services/brand.service';
-import { Brand } from '../../../../../../features/brand/models/brand.model';
+import { Brand } from '../../../../../brand/models/brand-models/brand.model';
 
 @Component({
   selector: 'app-owner-view',

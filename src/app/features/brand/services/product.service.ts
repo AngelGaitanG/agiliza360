@@ -2,8 +2,8 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../../environments/environment';
-import { CreateProductResponse, GetProductsByBrandResponse, DeleteProductResponse } from '../models/product.response';
-import { ProductDTO } from '../models/product.dto';
+import { CreateProductResponse, GetProductsByBrandResponse, DeleteProductResponse } from '../models/product-models/product.response';
+import { ProductDTO } from '../models/product-models/product.dto';
 
 @Injectable({
   providedIn: 'root'

@@ -1,0 +1,206 @@
+@use '../../../../../styles/variables' as *;
+
+.brand-config-container {
+  padding: 1.25rem;
+  overflow-y: auto;
+  max-width: 1200px;
+  margin: 0 auto;
+
+  .config-header {
+    margin-bottom: 1.25rem;
+    
+    h1 {
+      color: $white;
+      margin: 0;
+      font-size: 1.5rem;
+    }
+  }
+
+  .loading-spinner {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 150px;
+    color: $primary;
+    font-size: 1.5rem;
+  }
+
+  .config-form {
+    background: $white;
+    border-radius: $border-radius;
+    border: 1px solid $gray-200;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    padding: 1.5rem;
+  }
+
+  .form-sections-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2rem;
+
+    @media (max-width: 768px) {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .form-section {
+    &:not(:last-child) {
+      margin-bottom: 2rem;
+    }
+    
+    &.full-width {
+      grid-column: 1 / -1;
+    }
+
+    h2 {
+      color: $gray-800;
+      margin: 0 0 1rem 0;
+      font-size: 1.1rem;
+      font-weight: 600;
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid $gray-200;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+    }
+  }
+
+  .form-group {
+    margin-bottom: 1rem;
+    position: relative;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+
+    &.small-field {
+      max-width: 150px;
+    }
+
+    &.medium-field {
+      max-width: 250px;
+    }
+
+    &.large-field {
+      max-width: 350px;
+    }
+    
+    label {
+      display: block;
+      margin-bottom: 0.25rem;
+      color: $gray-700;
+      font-size: 0.9rem;
+    }
+    
+    input, 
+    textarea,
+    select,
+    app-custom-select {
+      width: 100%;
+      padding: 0.5rem;
+      border: 1px solid $gray-300;
+      border-radius: $border-radius;
+      background: $white;
+      color: $gray-800;
+      font-size: 0.9rem;
+      
+      &:focus {
+        outline: none;
+        border-color: $primary;
+        box-shadow: 0 0 0 2px rgba($primary, 0.1);
+      }
+      
+      &.invalid {
+        border-color: $error;
+      }
+
+      &:disabled {
+        background: $gray-100;
+        cursor: not-allowed;
+      }
+    }
+
+    textarea {
+      min-height: 80px;
+      resize: vertical;
+    }
+
+    select {
+      appearance: none;
+      background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23666' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+      background-repeat: no-repeat;
+      background-position: right 0.5rem center;
+      background-size: 1em;
+      padding-right: 2rem;
+    }
+  }
+
+  .checkbox-group {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 0.75rem;
+    margin-top: 0.5rem;
+  }
+
+  .checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: $gray-700;
+    cursor: pointer;
+    font-size: 0.9rem;
+    
+    input[type="checkbox"] {
+      width: 1rem;
+      height: 1rem;
+      border: 2px solid $gray-400;
+      border-radius: 3px;
+      background: $white;
+      cursor: pointer;
+
+      &:checked {
+        background: $primary;
+        border-color: $primary;
+      }
+    }
+  }
+
+  .form-actions {
+    margin-top: 1.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid $gray-200;
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: $border-radius;
+    background: $primary;
+    color: $white;
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: $transition;
+
+    &:hover:not(:disabled) {
+      background: $primary-dark;
+    }
+
+    &:disabled {
+      background: $gray-400;
+      cursor: not-allowed;
+    }
+
+    i {
+      font-size: 0.9rem;
+    }
+  }
+}

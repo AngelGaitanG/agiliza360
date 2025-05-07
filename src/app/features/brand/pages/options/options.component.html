@@ -1,1 +1,85 @@
-<h1>Options</h1>
+<div class="options-container">
+  <div class="options-header">
+    <h1>Gestión de Opciones</h1>
+    <button class="btn-primary" (click)="openCreateModal()">
+      <i class="fas fa-plus"></i>
+      Nueva Opción
+    </button>
+  </div>
+
+  <div class="options-content" [class.loading]="loading">
+    <div *ngIf="loading" class="loading-spinner">
+      <i class="fas fa-spinner fa-spin"></i>
+    </div>
+
+    <div *ngIf="!loading && options.length === 0" class="no-data">
+      <p>No hay opciones disponibles</p>
+    </div>
+
+    <div *ngIf="!loading && options.length > 0" class="options-grid">
+      <div *ngFor="let option of options" class="option-card">
+        <div class="option-header">
+          <h3>{{option.name}}</h3>
+          <div class="option-actions">
+            <button class="btn-icon" (click)="deleteOption(option._id)">
+              <i class="fas fa-trash"></i>
+            </button>
+          </div>
+        </div>
+        <div class="option-body">
+          <p class="price">{{option.basePrice | currency}}</p>
+          <p class="modifier" *ngIf="option.modifierId">ID Modificador: {{option.modifierId}}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal de creación -->
+<div class="modal" *ngIf="showCreateModal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2>Nueva Opción</h2>
+      <button class="btn-icon" (click)="closeCreateModal()">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+
+    <form [formGroup]="optionForm" (ngSubmit)="createOption()">
+      <div class="form-group">
+        <label for="name">Nombre</label>
+        <input 
+          id="name" 
+          type="text" 
+          formControlName="name"
+          [class.invalid]="optionForm.get('name')?.invalid && optionForm.get('name')?.touched">
+        <app-input-error 
+          [show]="(optionForm.get('name')?.invalid && optionForm.get('name')?.touched) ?? false"
+          [message]="optionForm.get('name')?.errors?.['required'] ? 'El nombre es requerido' : 'El nombre debe tener al menos 3 caracteres'">
+        </app-input-error>
+      </div>
+
+      <div class="form-group">
+        <label for="basePrice">Precio Base</label>
+        <input 
+          id="basePrice" 
+          type="number" 
+          step="0.01"
+          formControlName="basePrice"
+          [class.invalid]="optionForm.get('basePrice')?.invalid && optionForm.get('basePrice')?.touched">
+        <app-input-error 
+          [show]="(optionForm.get('basePrice')?.invalid && optionForm.get('basePrice')?.touched) ?? false"
+          [message]="getBasePriceErrorMessage()">
+        </app-input-error>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn-secondary" (click)="closeCreateModal()">Cancelar</button>
+        <button type="submit" class="btn-primary" [disabled]="optionForm.invalid || loading">
+          <i class="fas fa-spinner fa-spin" *ngIf="loading"></i>
+          Guardar
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

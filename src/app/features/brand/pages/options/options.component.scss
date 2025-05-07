@@ -1,0 +1,277 @@
+@use '../../../../../styles/variables' as *;
+
+.options-container {
+  padding: 2rem;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.options-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  
+  h1 {
+    color: $white;
+    margin: 0;
+  }
+}
+
+.options-content {
+  flex: 1;
+  position: relative;
+  
+  &.loading {
+    opacity: 0.7;
+    pointer-events: none;
+  }
+}
+
+.loading-spinner {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 2rem;
+  color: $primary;
+}
+
+.no-data {
+  text-align: center;
+  padding: 2rem;
+  color: $gray-500;
+}
+
+.options-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1.5rem;
+}
+
+.option-card {
+  background: $gray-900;
+  border-radius: $border-radius;
+  padding: 1.5rem;
+  box-shadow: $box-shadow;
+  
+  .option-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 1rem;
+    
+    h3 {
+      margin: 0;
+      color: $white;
+      font-size: 1.25rem;
+    }
+  }
+  
+  .option-body {
+    p {
+      margin: 0.5rem 0;
+      color: $gray-300;
+      
+      &.price {
+        color: $primary-light;
+        font-weight: bold;
+        font-size: 1.1rem;
+      }
+    }
+  }
+}
+
+.status-badge {
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  border-radius: 1rem;
+  font-size: 0.875rem;
+  background: $gray-700;
+  color: $gray-300;
+  
+  &.active {
+    background: $success;
+    color: $white;
+  }
+}
+
+// Modal styles
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba($black, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background: $gray-900;
+  border-radius: $border-radius;
+  width: 100%;
+  max-width: 500px;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.modal-header {
+  padding: 1.5rem;
+  border-bottom: 1px solid $gray-700;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  
+  h2 {
+    margin: 0;
+    color: $white;
+  }
+}
+
+form {
+  padding: 1.5rem;
+}
+
+.form-group {
+  margin-bottom: 1.5rem;
+  position: relative;
+  
+  label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: $gray-300;
+  }
+  
+  input, textarea {
+    width: 100%;
+    padding: 0.75rem;
+    padding-right: 2.5rem;
+    border: 1px solid $gray-700;
+    border-radius: $border-radius;
+    background: $gray-900;
+    color: $white;
+    
+    &:focus {
+      outline: none;
+      border-color: $primary;
+    }
+    
+    &.invalid {
+      border-color: $error;
+    }
+  }
+  
+  textarea {
+    min-height: 100px;
+    resize: vertical;
+  }
+
+  app-input-error {
+    position: absolute;
+    top: 50%;
+    right: 0.5rem;
+    transform: translateY(-50%);
+    z-index: 10;
+  }
+
+  textarea + app-input-error {
+    top: 2rem;
+    transform: none;
+  }
+}
+
+.checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  color: $gray-300;
+  
+  input[type="checkbox"] {
+    width: auto;
+  }
+}
+
+.error-message {
+  color: $error;
+  font-size: 0.875rem;
+  margin-top: 0.25rem;
+}
+
+.modal-footer {
+  padding: 1.5rem;
+  border-top: 1px solid $gray-700;
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+}
+
+// Estilos de botones
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: $border-radius;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: $transition;
+  background: $primary;
+  color: $white;
+
+  &:hover {
+    background: $primary-dark;
+  }
+
+  &:disabled {
+    background: $gray-600;
+    cursor: not-allowed;
+  }
+}
+
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: $border-radius;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: $transition;
+  background: $gray-700;
+  color: $white;
+
+  &:hover {
+    background: $gray-600;
+  }
+}
+
+.btn-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: $transition;
+  background: transparent;
+  color: $gray-400;
+
+  &:hover {
+    background: $gray-800;
+    color: $error;
+  }
+}

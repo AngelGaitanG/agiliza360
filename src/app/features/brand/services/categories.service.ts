@@ -2,8 +2,8 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../../environments/environment';
-import { CreateCategoryDto } from '../models/category.dto';
-import { CreateCategoryResponse, GetBrandCategoriesResponse, DeleteCategoryResponse } from '../models/category.response';
+import { CreateCategoryDto } from '../models/category-models/category.dto';
+import { CreateCategoryResponse, GetBrandCategoriesResponse, DeleteCategoryResponse } from '../models/category-models/category.response';
 
 @Injectable({
   providedIn: 'root'

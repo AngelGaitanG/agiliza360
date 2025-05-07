@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { ProductService } from '../../services/product.service';
 import { NotificationService } from '../../../../shared/services/notification.service';
 import { ActivatedRoute } from '@angular/router';
-import { Product } from '../../models/product.model';
+import { Product } from '../../models/product-models/product.model';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { InputErrorComponent } from '../../../../shared/components/input-error/input-error.component';
 

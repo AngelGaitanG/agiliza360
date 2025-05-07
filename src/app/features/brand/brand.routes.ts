@@ -5,10 +5,10 @@ export const BRAND_ROUTES: Routes = [
         path: '',
         loadComponent: () => import('../../layouts/main/main-layout.component').then(m => m.MainLayoutComponent),
         children: [
-            // {
-            //     path: ':id/dashboard',
-            //     loadComponent: () => import('./pages/dashboard/dashboard.component').then(m => m.DashboardComponent)
-            // },
+            {
+                path: ':id/brand-configuration',
+                loadComponent: () => import('./pages/brand-configuration/brand-configuration.component').then(m => m.BrandConfigurationComponent)
+            },
             {
                 path: ':id/menu',
                 loadComponent: () => import('./pages/menu/menu.component').then(m => m.MenuComponent),

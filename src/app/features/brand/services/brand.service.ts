@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../../environments/environment';
-import { Brand } from '../models/brand.model';
-import { CreateBrandResponse } from '../models/create-brand.response';
+import { Brand } from '../models/brand-models/brand.model';
+import { BrandResponse } from '../models/brand-models/create-brand.response';
+import { UpdateBrandDto } from '../models/brand-models/brand.dto';
 
 @Injectable({
   providedIn: 'root'
@@ -22,26 +23,50 @@ export class BrandService {
     });
   }
 
-  getBrandById(id: string): Observable<Brand> {
-    return this.http.get<Brand>(`${this.apiUrl}/${id}`);
-  }
   // this.http.post(`${environment.apiUrl}/brand`, formData, {
-  //   headers: {
+    //   headers: {
   //     'Authorization': `Bearer ${token}`
   //   }
-  createBrand(brand: Partial<Brand>): Observable<CreateBrandResponse> {
-    return this.http.post<CreateBrandResponse>(this.apiUrl, brand, {
+  createBrand(brand: Partial<Brand>): Observable<BrandResponse> {
+    return this.http.post<BrandResponse>(this.apiUrl, brand, {
       headers: {
         'Authorization': `Bearer ${this.token}`
       }
     });
   }
 
-  updateBrand(id: string, brand: Partial<Brand>): Observable<Brand> {
-    return this.http.put<Brand>(`${this.apiUrl}/${id}`, brand);
+  updateBrand(id: string, brand: UpdateBrandDto): Observable<BrandResponse> {
+    return this.http.patch<BrandResponse>(
+      `${this.apiUrl}/${id}/settings`, 
+      brand,
+      {
+        headers: new HttpHeaders({
+          'Authorization': `Bearer ${this.token}`
+        })
+      }
+    );
+  }
+
+  getBrandById(id: string): Observable<BrandResponse> {
+    return this.http.get<BrandResponse>(
+      `${this.apiUrl}/${id}`,
+      {
+        headers: new HttpHeaders({
+          'Authorization': `Bearer ${this.token}`
+        })
+      }
+    );
   }
 
   deleteBrand(id: string): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrl}/${id}`);
+    const token = localStorage.getItem('token');
+    return this.http.delete<void>(
+      `${this.apiUrl}/${id}`,
+      {
+        headers: new HttpHeaders({
+          'Authorization': `Bearer ${token}`
+        })
+      }
+    );
   }
 } 

@@ -1,6 +1,6 @@
 import { Brand } from "./brand.model";
 
-export interface CreateBrandResponse {
+export interface BrandResponse {
     type: string;
     message: string;
     statusCode: number;

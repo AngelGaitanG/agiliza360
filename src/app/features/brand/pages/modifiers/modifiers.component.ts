@@ -3,7 +3,7 @@ import { CommonModule } from "@angular/common";
 import { ModifiersService } from "../../services/modifiers.service";
 import { NotificationService } from "../../../../shared/services/notification.service";
 import { ActivatedRoute } from "@angular/router";
-import { Modifier } from "../../models/modifier.model";
+import { Modifier } from "../../models/modifier-models/modifier.model";
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from "@angular/forms";
 import { InputErrorComponent } from "../../../../shared/components/input-error/input-error.component";
 
